@@ -5,7 +5,7 @@ Goal: a numbered set of PNG frames of exactly the thing to clone, at a known fps
 ## Live website
 
 ```bash
-bun <skill>/scripts/capture.ts --url https://example.com --out .motion-clone/<name>/ref \
+bun <skill>/scripts/capture.ts --url https://example.com --out .reanimate/<name>/ref \
   --viewport 1440x900 --selector "section.hero" --trigger load --duration 3000 \
   --track "section.hero h1, section.hero p, section.hero .cta"
 ```
@@ -64,8 +64,8 @@ When the page needs the user's login, blocks headless Chromium, or the user want
 
 ```bash
 bun <skill>/scripts/frames.ts --in ref.mp4 --probe                        # duration, size, fps
-bun <skill>/scripts/frames.ts --in ref.mp4 --out .motion-clone/<name>/ref/frames --fps 25 --start 0:12 --end 0:15.5 --crop 320,180,1280,720
-bun <skill>/scripts/sheet.ts filmstrip --frames .motion-clone/<name>/ref/frames --out .motion-clone/<name>/ref/sheets
+bun <skill>/scripts/frames.ts --in ref.mp4 --out .reanimate/<name>/ref/frames --fps 25 --start 0:12 --end 0:15.5 --crop 320,180,1280,720
+bun <skill>/scripts/sheet.ts filmstrip --frames .reanimate/<name>/ref/frames --out .reanimate/<name>/ref/sheets
 ```
 
 - Extract a few frames at 2 fps first to pick the time range and crop, then re-extract the real range at 25 to 30 fps (gifs: use their own fps, usually 10 to 20; `--probe` prints it).

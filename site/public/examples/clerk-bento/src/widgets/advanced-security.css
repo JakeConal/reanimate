@@ -1,6 +1,6 @@
 /* "Advanced security" card visual: a round fingerprint button between two notched side panels, under a
    top-down radial vignette; on hover a WebGL2 dot field and a glow ring are mounted (advanced-security.js).
-   Every value is clerk.com's resolved Tailwind (module 561502, .motion-clone/clerk-bento/dom/advanced-security.html);
+   Every value is clerk.com's resolved Tailwind (module 561502, .reanimate/clerk-bento/dom/advanced-security.html);
    colours with alpha use the same color-mix()/lab() as clerk.com's @supports branches, gradients the same
    "in oklab" interpolation. Stacking is clerk.com's: the slot is isolated, the panels and the dot field are
    z-auto (under the z-10 vignette), the button layers are z-10 (over it). */

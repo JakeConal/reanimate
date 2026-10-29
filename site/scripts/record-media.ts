@@ -353,7 +353,7 @@ if (masters["stripe-bento-reference"]) {
   readmeWebp(
     [
       { ...masters["stripe-bento-reference"], strip: await strip(browser, "stripe.com", "the original", w) },
-      { ...masters["stripe-bento-clone"], strip: await strip(browser, "motion-clone", "the copy, filmed the same way", w) },
+      { ...masters["stripe-bento-clone"], strip: await strip(browser, "reanimate", "the copy, filmed the same way", w) },
     ],
     "stack",
     w,
@@ -367,7 +367,7 @@ if (masters["stripe-issuing-reference"]) {
   readmeWebp(
     [
       { ...masters["stripe-issuing-reference"], strip: await strip(browser, "stripe.com", "original", w / 2) },
-      { ...masters["stripe-issuing-clone"], strip: await strip(browser, "motion-clone", "copy", w / 2) },
+      { ...masters["stripe-issuing-clone"], strip: await strip(browser, "reanimate", "copy", w / 2) },
     ],
     "side",
     w,

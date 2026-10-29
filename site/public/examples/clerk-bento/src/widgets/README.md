@@ -36,7 +36,7 @@ the top (clerk.com's sub-pixel offset kept), and mounts only that card's widget.
 (`document.body.style.padding = "1800px 0 900px"`): `scrollIntoView` then lands the card on the same viewport y
 as on clerk.com, which has the same `scroll-padding-top: 4rem`. Each slot gets `data-widget-state` (`loading`, `mounted`, `static`,
 `empty`, `error`); `<html data-widgets="ready">` and `await window.clerkBento.ready` mark the end of loading.
-Recon notes, the cards' clerk.com DOM, CSS and source: `.motion-clone/clerk-bento/` (`cards.md`).
+Recon notes, the cards' clerk.com DOM, CSS and source: `.reanimate/clerk-bento/` (`cards.md`).
 
 ## Shared modules
 

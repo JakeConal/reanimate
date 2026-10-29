@@ -36,7 +36,7 @@
 // - The streaks mount on the frame after the pointer event (their clock starts on the frame after that); the
 //   lights' timers start at the pointer event; on hover-out the WAAPI values, the streaks' fade and the lights
 //   going dark start on the next frame. Interrupted animations continue from their current value.
-// Timing measured on clerk.com with virtual-clock captures: .motion-clone/clerk-bento/api-keys/ (spec.md).
+// Timing measured on clerk.com with virtual-clock captures: .reanimate/clerk-bento/api-keys/ (spec.md).
 // - The spinner follows mouseenter/mouseleave (clerk.com's separate isPointerOver state), the rest follows
 //   pointerenter/pointerleave with touch ignored (react-aria useHover).
 
@@ -302,7 +302,7 @@ export function mount(slot, card) {
   // ---------- hover ----------
   // react-aria useHover on the card (pointerenter/leave, touch ignored) drives everything but the spinner, which
   // follows clerk.com's separate isPointerOver state (mouseenter/leave). Timing measured on clerk.com
-  // (virtual-clock captures, see .motion-clone/clerk-bento/api-keys/): the JS values are timed from the pointer
+  // (virtual-clock captures, see .reanimate/clerk-bento/api-keys/): the JS values are timed from the pointer
   // event both ways, the WAAPI values from the event on hover-in and from the next frame on hover-out; the
   // lights' timers start at the event; the spinner, the streaks and the lights going dark follow on the next frame.
   let hovered = false;

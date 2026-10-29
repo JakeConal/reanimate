@@ -4,7 +4,7 @@
 // every 1.65-2.18 s the antenna reaches out to one more chip (picked from a shuffled bag, away from the
 // links still alive, preferring another ring and another brand hue): a line draws in, the chip swells
 // inside a ring in its brand colour, a ripple goes out, and the link fades about 5 s later.
-// Layout, timings, easings and the picking rules are the original's; see .motion-clone/workos-atlas.
+// Layout, timings, easings and the picking rules are the original's; see .reanimate/workos-atlas.
 
 import { springEasing, tween, waapi, springFollower } from "./motion.js";
 import { mountFaceShader } from "./face.js";

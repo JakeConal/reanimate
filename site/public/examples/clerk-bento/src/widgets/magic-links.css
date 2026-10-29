@@ -1,7 +1,7 @@
 /* "Magic Links" card visual: a field of mono noise text, a code chip that a cyan scan line reveals, a profile
    card (avatar silhouette, name, email) that traces in cyan, gets a check, and rotates out to the next user.
    Sizes, colours, gradients and shadows are clerk.com's resolved Tailwind values (module 642634,
-   .motion-clone/clerk-bento/dom/magic-links.html + .hover.html); colours with alpha use the same color-mix() as
+   .reanimate/clerk-bento/dom/magic-links.html + .hover.html); colours with alpha use the same color-mix() as
    clerk.com's @supports branch. magic-links.js builds the keyed parts and animates them. */
 
 .clerk-card--magic-links .ml-root {

@@ -1,6 +1,6 @@
-<h1 align="center">motion-clone</h1>
+<h1 align="center">reanimate</h1>
 
-<p align="center"><b>Clone any animation, frame by frame. Then prove the copy moves the same.</b><br>A Claude Code skill that works from a live site, a screen recording, an mp4, a gif or a Lottie file.</p>
+<p align="center"><b>Reverse-engineer any animation, frame by frame. Then prove the copy moves the same.</b><br>A Claude Code skill that works from a live site, a screen recording, an mp4, a gif or a Lottie file.</p>
 
 <p align="center">
   <a href="https://code.claude.com/docs/en/skills"><img src="https://img.shields.io/badge/Claude_Code-skill-171717?style=flat-square&logo=claude&logoColor=white" alt="Claude Code skill"></a>
@@ -10,27 +10,27 @@
 </p>
 
 <p align="center">
-  <img src=".github/assets/entrance.webp" width="760" alt="Two recordings of the same three cards fading in: stripe.com on top, the copy motion-clone built below. The chat bubbles, the particle ring, the Visa card and the dotted globe appear at the same moments in both.">
+  <img src=".github/assets/entrance.webp" width="760" alt="Two recordings of the same three cards fading in: stripe.com on top, the copy reanimate built below. The chat bubbles, the particle ring, the Visa card and the dotted globe appear at the same moments in both.">
 </p>
 <p align="center"><sub>Three cards from stripe.com. Top: the original. Bottom: the copy, filmed the same way.</sub></p>
 
 Copying an animation by eye always ends the same way. It looks right in a screenshot and feels off in motion: the easing is a little sharp, the second line starts a beat late, the card lifts four pixels instead of six. Nobody can say what's wrong, so nobody fixes it.
 
-motion-clone measures instead. Claude films the original, writes down every timing and easing, rebuilds the animation in your code, films the copy the same way, and compares the two until the numbers agree. You get the code and the evidence.
+reanimate measures instead. Claude films the original, writes down every timing and easing, rebuilds the animation in your code, films the copy the same way, and compares the two until the numbers agree. You get the code and the evidence.
 
 ## Install
 
 ```sh
-npx skills add NiazMorshed2007/motion-clone -g
+npx skills add NiazMorshed2007/reanimate -g
 ```
 
 The [skills CLI](https://skills.sh) asks which agents to set up; add `-a claude-code` to skip the question. Then, in Claude Code, say what you want, where it is and where it should go:
 
 ```text
-/motion-clone the hero entrance on https://example.com, into components/Hero.tsx
-/motion-clone this loader, 0:03 to 0:05 of ~/Downloads/loader.mov
-/motion-clone the card hover in this gif, match it exactly
-/motion-clone the logo marquee from https://example.com, with our logos and pause on hover
+/reanimate the hero entrance on https://example.com, into components/Hero.tsx
+/reanimate this loader, 0:03 to 0:05 of ~/Downloads/loader.mov
+/reanimate the card hover in this gif, match it exactly
+/reanimate the logo marquee from https://example.com, with our logos and pause on hover
 ```
 
 Needs [Bun](https://bun.sh) 1.1 or later, on macOS or Linux (Windows is untested). The first run installs a static ffmpeg into the skill's folder and Playwright's Chromium into Playwright's usual cache, about 250 MB together. No API keys. Other agents that read `SKILL.md` can install it too, but it has only been tested with Claude Code.
@@ -70,9 +70,9 @@ Three cards from the stripe.com homepage, the integrations visual from workos.co
 
 ## Canvas, WebGL and 3D
 
-A canvas only shows pixels, so motion-clone records the calls that drew them. With `--gl` it traces WebGL, WebGPU and canvas 2D. It hooks the three.js, Pixi, PlayCanvas, Babylon and OGL scene graphs through their own devtools entry points, and reaches into workers. Out come the shader sources, every constant uniform, the render passes, the textures and models, and each animated uniform or object property as a curve that can be fitted and compared. `--clock virtual` runs the page on a clock that is advanced frame by frame, with `Math.random` seeded in the page and its workers. Every frame is then exact however slow the GPU is, and two captures of a WebGL globe with random arcs and worker-generated dots come out byte-identical.
+A canvas only shows pixels, so reanimate records the calls that drew them. With `--gl` it traces WebGL, WebGPU and canvas 2D. It hooks the three.js, Pixi, PlayCanvas, Babylon and OGL scene graphs through their own devtools entry points, and reaches into workers. Out come the shader sources, every constant uniform, the render passes, the textures and models, and each animated uniform or object property as a curve that can be fitted and compared. `--clock virtual` runs the page on a clock that is advanced frame by frame, with `Math.random` seeded in the page and its workers. Every frame is then exact however slow the GPU is, and two captures of a WebGL globe with random arcs and worker-generated dots come out byte-identical.
 
-On live stripe.com this recovers the issuing card's four-pass composite, its shaders and constants such as `u_twistFrequencyX = 0.059`. It also records the card's tilt as a curve: −0.174 → 0.262 rad between 33 and 1800 ms on the pointer path. `gl.ts compare` then checks the clone against it channel by channel; the tilt matched within 33 ms and 0.5 % of its range. See [`references/webgl.md`](skills/motion-clone/references/webgl.md).
+On live stripe.com this recovers the issuing card's four-pass composite, its shaders and constants such as `u_twistFrequencyX = 0.059`. It also records the card's tilt as a curve: −0.174 → 0.262 rad between 33 and 1800 ms on the pointer path. `gl.ts compare` then checks the clone against it channel by channel; the tilt matched within 33 ms and 0.5 % of its range. See [`references/webgl.md`](skills/reanimate/references/webgl.md).
 
 ## Limits
 
@@ -85,7 +85,7 @@ On live stripe.com this recovers the issuing card's four-pass composite, its sha
 
 ## Repository
 
-Only `skills/motion-clone/` is installed by the skills CLI; `site/` is the website with the examples running live ([`site/README.md`](site/README.md)).
+Only `skills/reanimate/` is installed by the skills CLI; `site/` is the website with the examples running live ([`site/README.md`](site/README.md)).
 
 <details>
 <summary>What's in the skill</summary>

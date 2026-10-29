@@ -14,7 +14,7 @@
 //   animation frame, colours mixed as sqrt(a²(1−p)+b²p) per channel.
 // - A transition without `ease` uses Motion's default "easeOut" = cubic-bezier(0,0,.58,1); one with only a delay
 //   uses Motion's default tween (0.3 s, cubic-bezier(.25,.1,.35,1)).
-// - Timing, measured on clerk.com (virtual-clock captures, see .motion-clone/clerk-bento/session-management/):
+// - Timing, measured on clerk.com (virtual-clock captures, see .reanimate/clerk-bento/session-management/):
 //   on hover-in the WAAPI animations are back-dated to the pointer event (Motion sets animation.startTime), the
 //   JS-driven values start on the next frame, and the meteor mounts on the next frame (React runs its effect
 //   after paint) so its clock starts one frame later still; on hover-out everything starts on the next frame.

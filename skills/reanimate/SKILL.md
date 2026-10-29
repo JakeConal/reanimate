@@ -1,9 +1,9 @@
 ---
-name: motion-clone
-description: Clone a section, widget, page or animation from any reference (a live website URL, a screen recording, an mp4/mov/webm, a gif, a Lottie file, a prototype export) frame by frame into the user's own codebase, then record the clone and verify it against the reference frame by frame, iterating until timing, easing, sequence and layout match. Use whenever the user wants to clone, copy, replicate, recreate, port or "steal" a hero, section, widget, marquee, carousel, hover effect, page transition, loader, scroll animation or interaction from a site or video, says "make it look/feel/move like this", "same animation as", "match this exactly", or hands over a gif/video and asks to build it, including when they also want to add their own content, colours or extra features on top, or only want part of the reference (one section, one widget, a few seconds). Covers canvas, WebGL, WebGPU and three.js / 3D scenes (shaders, particles, globes, glTF models) as well as CSS and JS motion. Pixel-level matching of fonts, colours and spacing is done only when they ask for it.
+name: reanimate
+description: Clone a section, widget, page or animation from any reference (a live website URL, a screen recording, an mp4/mov/webm, a gif, a Lottie file, a prototype export) frame by frame into the user's own codebase, then record the clone and verify it against the reference frame by frame, iterating until timing, easing, sequence and layout match. Use whenever the user wants to clone, copy, replicate, recreate, reverse-engineer, port or "steal" a hero, section, widget, marquee, carousel, hover effect, page transition, loader, scroll animation or interaction from a site or video, says "make it look/feel/move like this", "same animation as", "match this exactly", or hands over a gif/video and asks to build it, including when they also want to add their own content, colours or extra features on top, or only want part of the reference (one section, one widget, a few seconds). Covers canvas, WebGL, WebGPU and three.js / 3D scenes (shaders, particles, globes, glTF models) as well as CSS and JS motion. Pixel-level matching of fonts, colours and spacing is done only when they ask for it.
 ---
 
-# motion-clone
+# reanimate
 
 Rebuild what the user points at so that it moves the way the reference moves, prove it with a frame-by-frame comparison, and keep going until the comparison passes. The deliverable is code in the user's project plus evidence (numbers and side-by-side sheets), never "it looks about right".
 
@@ -21,11 +21,11 @@ The user can narrow the target to one section, one widget, one page, or a time r
 
 ## Workflow
 
-Everything below lives in `.motion-clone/<name>/` inside the user's project (add it to `.gitignore` unless they want the evidence committed). Keep each round's artefacts; they are the proof.
+Everything below lives in `.reanimate/<name>/` inside the user's project (add it to `.gitignore` unless they want the evidence committed). Keep each round's artefacts; they are the proof.
 
 ### 0. Scope
 
-Write three lines at the top of `.motion-clone/<name>/spec.md` before any capture:
+Write three lines at the top of `.reanimate/<name>/spec.md` before any capture:
 
 - **Target**: what to clone, as precisely as the user said it (URL + selector / time range / "the toggle in the gif").
 - **Destination**: where the code goes and in what stack (read `package.json`, existing components and the animation library already in use; match it rather than introducing a new one).

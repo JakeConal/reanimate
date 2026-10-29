@@ -13,7 +13,7 @@
 //   linear() (one point per 10 ms); on finish the end value is written to the style.
 // - scale (the ✕ disc) and rotate (the spinner): Motion's JS loop, one value per animation frame, rendered as
 //   `transform: scale()/rotate()` ("none" at the default value).
-// - Timing, measured on clerk.com (virtual-clock captures with logged pointer events, .motion-clone/clerk-bento/
+// - Timing, measured on clerk.com (virtual-clock captures with logged pointer events, .reanimate/clerk-bento/
 //   fraud/): at the pointer event the running animations are stopped (a WAAPI one is sampled at that instant and the
 //   value committed; a JS one keeps its last frame); on the next frame the new animations are created from the current
 //   values, all back-dated to the event (Motion's createdAt). The meteor is mounted on the next frame.

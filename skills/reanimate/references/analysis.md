@@ -10,7 +10,7 @@ The spec turns "I watched it" into rows you can check. Write it before building;
 Target: <url + selector | file + time range>   Viewport: 1440x900   Fps: 25
 Destination: <path/Component.tsx> (<stack: React + Framer Motion | CSS | GSAP …>)
 Fidelity: motion-faithful | pixel-faithful | mixed (additions: …)
-Reference capture: .motion-clone/<name>/ref  (command: …)
+Reference capture: .reanimate/<name>/ref  (command: …)
 
 ## Structure (static)
 | element | role / selector (ref → clone) | box at rest (x,y,w,h) | notes (overflow, z-index, origin, clip) |

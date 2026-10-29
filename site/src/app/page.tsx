@@ -5,8 +5,8 @@ import { Nav, type NavItem } from "@/components/Nav";
 import { Sidenote } from "@/components/Sidenote";
 import { examples, media, type Example } from "@/examples";
 
-const REPO = "https://github.com/NiazMorshed2007/motion-clone";
-const INSTALL = "npx skills add NiazMorshed2007/motion-clone -g";
+const REPO = "https://github.com/NiazMorshed2007/reanimate";
+const INSTALL = "npx skills add NiazMorshed2007/reanimate -g";
 
 const sections: NavItem[] = [
   { id: "how", label: "How it works" },
@@ -101,7 +101,7 @@ export default function Home() {
       <main className="main">
         <header className="masthead">
           <h1>
-            motion-clone <span>· a skill for Claude Code</span>
+            reanimate <span>· a skill for Claude Code</span>
           </h1>
           <div className="masthead__links">
             <a href={REPO}>GitHub</a>
@@ -114,11 +114,11 @@ export default function Home() {
 
         <CopyCommand command={INSTALL} />
         <p className="hint">
-          Then, in Claude Code, type <code>/motion-clone</code> and say what to copy. <a href="#use">How to ask ↓</a>
+          Then, in Claude Code, type <code>/reanimate</code> and say what to copy. <a href="#use">How to ask ↓</a>
         </p>
 
         <div className="meta">
-          <span>/motion-clone</span>
+          <span>/reanimate</span>
           <span><a href="#examples">{examples.length} live examples ↓</a></span>
           <span>by <a href="https://github.com/NiazMorshed2007">Niaz</a></span>
         </div>
@@ -127,7 +127,7 @@ export default function Home() {
           Copying an animation by eye rarely works. The copy looks right in a screenshot and feels off in motion: the easing is a bit sharper, a line starts a beat late. Nobody can say what’s wrong, so nobody fixes it.
         </p>
         <p>
-          motion-clone <em>measures</em> instead. Claude records the original, whether it’s a live site, a screen recording or a gif, writes down every timing and easing, and rebuilds it in your code. Then it records the copy the same way and compares the two until the numbers agree.
+          reanimate <em>measures</em> instead. Claude records the original, whether it’s a live site, a screen recording or a gif, writes down every timing and easing, and rebuilds it in your code. Then it records the copy the same way and compares the two until the numbers agree.
         </p>
 
         <figure className="figure">
@@ -171,7 +171,7 @@ export default function Home() {
             {prompts.map(([label, text]) => (
               <div key={label}>
                 <span className="prompt__label">{label}</span>
-                <span className="prompt__text"><span className="slash">/motion-clone</span> {text}</span>
+                <span className="prompt__text"><span className="slash">/reanimate</span> {text}</span>
               </div>
             ))}
           </div>
@@ -263,7 +263,7 @@ export default function Home() {
 
         <footer className="footer">
           <span>
-            <a href={REPO}>GitHub</a> · MIT licence · built with motion-clone
+            <a href={REPO}>GitHub</a> · MIT licence · built with reanimate
           </span>
           <span>The examples recreate parts of stripe.com, workos.com and clerk.com as a study of the technique. Not affiliated with or endorsed by Stripe, WorkOS or Clerk. All trademarks belong to their owners.</span>
         </footer>

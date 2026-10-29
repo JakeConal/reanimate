@@ -240,7 +240,7 @@ html[data-card="passwords"] .clerk-card--passwords,
 html[data-card="api-keys"] .clerk-card--api-keys,
 html[data-card="clerk-cli"] .clerk-card--clerk-cli { display: flex; height: 100%; }
 
-/* ?card=<slug>&embed: the card 24px from every edge, no scrolling (the motion-clone site shows it in an iframe) */
+/* ?card=<slug>&embed: the card 24px from every edge, no scrolling (the reanimate site shows it in an iframe) */
 html[data-embed] { overflow: hidden; }
 html[data-embed] .clerk-bento { padding: 24px 0; }
 

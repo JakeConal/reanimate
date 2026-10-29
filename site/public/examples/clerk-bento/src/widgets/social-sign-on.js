@@ -21,7 +21,7 @@
 // - the logo steps are a Motion useAnimate sequence called from the side streaks' onBegin, guarded by the
 //   `hovered` prop: every chip moves one slot (at:"<", all together); the chip that wraps from the last slot to the
 //   first jumps there instantly ({duration:0}), on the next frame (Motion resolves keyframes a frame later).
-// - Timing (measured on clerk.com with virtual-clock captures, .motion-clone/clerk-bento/social-sign-on/; every
+// - Timing (measured on clerk.com with virtual-clock captures, .reanimate/clerk-bento/social-sign-on/; every
 //   element starts on the same frame as there): the hover state is a zustand store read with useSyncExternalStore,
 //   so React renders, commits and runs effects in a microtask right after the pointer event. The streak canvas
 //   mounts (or re-renders) then and its clock starts on the next frame, once its glow image has loaded. Motion

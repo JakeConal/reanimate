@@ -1,7 +1,7 @@
 /* "Clerk CLI" card visual: a glass terminal edge on the left, circuit lines into a round Clerk-logo button, and a
    ring of AI-tool logos on the right; on hover the logo lights up cyan, meteors run along the lines and the logos
    step round the ring (clerk-cli.js). Every value is clerk.com's resolved Tailwind at lg (module 731855,
-   .motion-clone/clerk-bento/dom/clerk-cli.html); colours with alpha use the same color-mix()/lab() as clerk.com's
+   .reanimate/clerk-bento/dom/clerk-cli.html); colours with alpha use the same color-mix()/lab() as clerk.com's
    @supports branches, gradients the same "in oklab" interpolation. Stacking is clerk.com's: inside the masked layer
    the meteor tracks and the carousel are z-auto (in that order), the lines z-5, the panel and the button z-10. */
 

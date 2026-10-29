@@ -26,7 +26,7 @@ export function Nav({ items }: { items: NavItem[] }) {
       <div className="nav__inner">
         <a href="#top" className="nav__brand">
           <span className="mark" aria-hidden="true"><i /><i /><i /></span>
-          motion-clone
+          reanimate
         </a>
         <ul>
           {items.map((i) => (

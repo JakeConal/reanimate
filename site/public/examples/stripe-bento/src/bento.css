@@ -31,7 +31,7 @@ html, body {
   color: var(--color-heading);
 }
 
-/* Embedded on the motion-clone site: room for the 6px hover growth, and ?card=<name> shows one card. */
+/* Embedded on the reanimate site: room for the 6px hover growth, and ?card=<name> shows one card. */
 body { padding: 18px 0; overflow: hidden; }
 html[data-card] .modular-solutions-bento__layout { justify-content: center; }
 html[data-card="agentic-commerce"] .modular-solutions-bento-card:not([data-widget="agentic-commerce"]),

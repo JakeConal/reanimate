@@ -1,6 +1,6 @@
-# motion-clone site
+# reanimate site
 
-The website for the motion-clone skill in [`../skills/motion-clone`](../skills/motion-clone). Next.js 16, exported as static files and served by a Cloudflare Worker (static assets only, no server code). Commands below run from this `site/` folder.
+The website for the reanimate skill in [`../skills/reanimate`](../skills/reanimate). Next.js 16, exported as static files and served by a Cloudflare Worker (static assets only, no server code). Commands below run from this `site/` folder.
 
 ## Develop
 
@@ -37,15 +37,15 @@ Set the public URL first, so the Open Graph and canonical links are absolute:
 
 ```sh
 # .env.production
-SITE_URL=https://motion-clone.<your-subdomain>.workers.dev
+SITE_URL=https://reanimate.<your-subdomain>.workers.dev
 ```
 
 Then either:
 
 - **From this machine:** `npx wrangler login` once (or export `CLOUDFLARE_API_TOKEN` with the "Edit Cloudflare Workers" template), then `bun run deploy`.
-- **On every push:** in the Cloudflare dashboard, Workers & Pages → Create → Import a repository → `NiazMorshed2007/motion-clone`. Root directory `site`, build command `bun run build`, deploy command `npx wrangler deploy`. Add `SITE_URL` as a build variable.
+- **On every push:** in the Cloudflare dashboard, Workers & Pages → Create → Import a repository → `NiazMorshed2007/reanimate`. Root directory `site`, build command `bun run build`, deploy command `npx wrangler deploy`. Add `SITE_URL` as a build variable.
 
-`wrangler.jsonc` names the Worker `motion-clone` and serves `./out`, with `404.html` for unknown paths.
+`wrangler.jsonc` names the Worker `reanimate` and serves `./out`, with `404.html` for unknown paths.
 
 ## Layout
 

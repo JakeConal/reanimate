@@ -10,7 +10,7 @@ const mono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"] });
 // environment) once the Worker has its final domain.
 const siteUrl = process.env.SITE_URL || "http://localhost:3000";
 
-const title = "motion-clone · a skill for Claude Code";
+const title = "reanimate · a skill for Claude Code";
 const description =
   "Point Claude at any animation, on a live site, in a video or a gif, and it rebuilds it frame by frame in your codebase, then records the copy and compares the two until they move the same.";
 
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
     title,
     description,
     url: "/",
-    siteName: "motion-clone",
+    siteName: "reanimate",
     type: "website",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Three stripe.com cards rebuilt by motion-clone" }],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Three stripe.com cards rebuilt by reanimate" }],
   },
   twitter: { card: "summary_large_image", title, description, images: ["/og.png"] },
 };

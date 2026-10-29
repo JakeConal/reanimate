@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "motion-clone-site",
+      "name": "reanimate-site",
       "dependencies": {
         "next": "16.4.3",
         "react": "19.3.0",

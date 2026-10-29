@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "motion-clone-scripts",
+      "name": "reanimate-scripts",
       "dependencies": {
         "ffmpeg-static": "^5.2.0",
         "pixelmatch": "^8.0.0",

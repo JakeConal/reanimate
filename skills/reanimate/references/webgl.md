@@ -5,10 +5,10 @@ A canvas only shows pixels, but everything that made them went through a few hun
 ## Capture
 
 ```bash
-bun <skill>/scripts/capture.ts --url https://example.com --out .motion-clone/<name>/ref \
+bun <skill>/scripts/capture.ts --url https://example.com --out .reanimate/<name>/ref \
   --viewport 1440x900 --selector ".hero" --trigger move --target ".hero canvas" --path "0.5,0.5;0.2,0.3;0.8,0.7" \
   --duration 3000 --clock virtual --gl --assets
-bun <skill>/scripts/gl.ts summary .motion-clone/<name>/ref
+bun <skill>/scripts/gl.ts summary .reanimate/<name>/ref
 ```
 
 | Flag | What it does | When |

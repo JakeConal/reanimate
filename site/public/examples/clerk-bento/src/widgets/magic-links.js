@@ -3,7 +3,7 @@
 // in (3.6 s), then the profile swings out on a wheel and a random next user swings in, and the cycle repeats every
 // 5.2 s while hovered. Hover-out fades the hovered layers (0.3 s) and slides the name back; the current user stays.
 //
-// clerk.com builds it with Motion for React (module 642634, .motion-clone/clerk-bento/src/magic-links.module.js).
+// clerk.com builds it with Motion for React (module 642634, .reanimate/clerk-bento/src/magic-links.module.js).
 // This file mirrors that component tree in plain DOM:
 //   - keyed parts are re-created when the user changes (NoiseCode, the cyan code, the scanner, the profile), and
 //     AnimatePresence semantics are kept: exiting parts keep their last props (frozen) while their exit runs, new

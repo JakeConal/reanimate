@@ -74,6 +74,6 @@ Canvas, WebGL, 3D (captured with `--clock virtual --gl`, see `references/webgl.m
 ## Verification (round N of M)
 | element / property | timing err (start/end/dur) | easing (ref → clone) | mismatch mean / worst | result |
 | h1 translateY+opacity | +0.00 / −0.04 / −0.04 s | easeOutExpo 700 → easeOutExpo 700 | 0.3 % / 1.1 % | pass |
-Sheets: .motion-clone/<name>/compare-N/sheets/compare-01.png …
+Sheets: .reanimate/<name>/compare-N/sheets/compare-01.png …
 Residuals: <none | row, numbers, reason>
 ```

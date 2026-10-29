@@ -1,4 +1,4 @@
-// Shared helpers for the motion-clone scripts. Bun + TypeScript, no build step.
+// Shared helpers for the reanimate scripts. Bun + TypeScript, no build step.
 import { mkdirSync, existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
