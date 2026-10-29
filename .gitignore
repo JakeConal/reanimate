@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+!.env.production
+
+# vendored at build by scripts/vendor-examples.mjs
+/public/examples/*/vendor/
+
+# wrangler
+.wrangler/
