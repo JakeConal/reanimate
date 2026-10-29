@@ -6,5 +6,6 @@
   "assets": {
     "directory": "./out",
     "not_found_handling": "404-page"
-  }
+  },
+  "routes": [{ "pattern": "reanimate.niazmorshed.dev", "custom_domain": true }]
 }
