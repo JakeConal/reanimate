@@ -33,6 +33,12 @@ Pixel-faithful adds:
 
 Mixed: the cloned region passes one of the above with `--region` limited to it; the additions are shown on a sheet and described.
 
+Canvas, WebGL, 3D (captured with `--clock virtual --gl`, see `references/webgl.md`):
+
+- `gl.ts compare --ref ref --clone clone-N`: every animated channel in the reference has a clone channel of the same kind, start and end within 0.08 s, mean error ≤ 5 % of the reference's range (`--map` when names differ); canvas attributes, renderer settings and draw structure (primitive, vertex count, blend state, cadence) the same, or the difference explained
+- the clock rate of every `clock` channel the same (`gl.ts channels`)
+- pixels as above. If the clone ports the reference's generator, the seeded random gives the same particles and the sharp mismatch applies. If not, judge with `compare.ts --blur 4` and report the sharp number next to it
+
 ## Reading failures → usual fix
 
 | Symptom | Usual cause | Fix |
@@ -51,8 +57,16 @@ Mixed: the cloned region passes one of the above with `--region` limited to it; 
 ## When to stop
 
 - Stop when every spec row passes its criteria and the latest sheets look the same state-by-state. Say so with the numbers.
-- Stop after 5 rounds without progress on a row, or when the remaining difference is outside your control (font licence, WebGL shader, third-party embed, physics you approximated). Report the row, its last numbers, and the reason. Never relax thresholds silently; if you think the user would accept a looser bar, say which and why.
-- If the reference itself is inconsistent between captures (randomised content, A/B variants, network-dependent lazy loading), capture it twice and compare it against itself to learn the noise floor before judging the clone.
+- Stop after 5 rounds without progress on a row, or when the remaining difference is outside your control (font licence, a shader or model the user may not copy, third-party embed, physics you approximated). Report the row, its last numbers, and the reason. Never relax thresholds silently; if you think the user would accept a looser bar, say which and why.
+- If the reference itself is inconsistent between captures (randomised content, A/B variants, network-dependent lazy loading), capture it with `--clock virtual` (same seed) first: that removes timing and randomness, and two captures come out identical. Whatever still differs (A/B variants, server-side randomness) is the noise floor; measure it by comparing the reference against itself before judging the clone.
+
+| Symptom (canvas) | Usual cause | Fix |
+|---|---|---|
+| same shapes, colours slightly off everywhere | colour management: `outputColorSpace`, texture colour space, tone mapping, three.js revision | copy the renderer settings from `gl.ts summary`; same revision |
+| edges harder or softer | `antialias`, pixel ratio, `premultipliedAlpha` | copy the context attributes and pixel ratio |
+| motion matches but looks steppier or smoother | render cadence (reference draws every other frame) or per-frame lag at a different rate | compare draws per frame in `gl.ts compare`; match cadence and `k` |
+| particles in different places, same density | different random order or seed | port the generator's call order, or verify with `--blur` |
+| channel missing in the clone | value baked into the shader, or a different uniform name | `--map ref=clone`, or expose it as a uniform |
 
 ## Report block
 

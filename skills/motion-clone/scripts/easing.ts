@@ -10,6 +10,8 @@ easing.ts — which easing is this?
   bun easing.ts --track <track.json> --selector <css> --prop <x|y|w|h|opacity|scale|translateX|translateY|rotate> [--from-ms T --to-ms T]
   bun easing.ts --series '[[t_ms, value], ...]'
   bun easing.ts --track <track.json> --selector <css> --prop y --compare-track <other.json>   # also diffs two tracks
+  bun easing.ts --track <gl-track.json> --channel <key> [--compare-track <other gl-track.json> --compare-channel <key>]
+                # a uniform, camera, object or material value from capture.ts --gl (key or its unique ending, e.g. uHover)
 
 Prints: start/end values, delay (first change), duration (first → last change), overshoot, and the best-fitting
 named easings with their RMSE. Use the top match as the CSS/Framer/GSAP easing in the clone, then re-run on the
@@ -28,9 +30,23 @@ function matrixPart(transform: string): { tx: number; ty: number; sx: number; sy
   return { tx: v[4], ty: v[5], sx: Math.hypot(v[0], v[1]), sy: Math.hypot(v[2], v[3]), rot: (Math.atan2(v[1], v[0]) * 180) / Math.PI };
 }
 
-function seriesFromTrack(path: string, selector: string, prop: string): [number, number][] {
+// gl-track.json channels: exact key, or a unique key ending in ".<name>" / "<name>"
+function resolveChannel(t: any, name: string): string {
+  if (t.channels[name]) return name;
+  const keys = Object.keys(t.channels).filter((k) => k.endsWith("." + name) || k.endsWith(name));
+  if (keys.length === 1) return keys[0];
+  throw new Error(keys.length ? `channel "${name}" is ambiguous: ${keys.slice(0, 12).join(", ")}` : `no animated channel "${name}" (bun gl.ts channels <dir> lists them; constants are in gl/gl.json)`);
+}
+
+function seriesFromTrack(path: string, selector: string, prop: string, channel?: string): [number, number][] {
   const t = readJson(path);
   const outS: [number, number][] = [];
+  if (t.kind === "gl-track") {
+    if (!channel) throw new Error("this is a gl-track.json: pass --channel <key>");
+    const k = resolveChannel(t, channel);
+    for (const s of t.samples) if (s.v[k] !== undefined) outS.push([s.t, s.v[k]]);
+    return outS;
+  }
   for (const s of t.samples) {
     const e = s.els?.[selector];
     if (!e) continue;
@@ -42,7 +58,7 @@ function seriesFromTrack(path: string, selector: string, prop: string): [number,
   return outS;
 }
 
-let series: [number, number][] = a.series ? JSON.parse(String(a.series)) : seriesFromTrack(String(a.track), String(a.selector), String(a.prop || "y"));
+let series: [number, number][] = a.series ? JSON.parse(String(a.series)) : seriesFromTrack(String(a.track), String(a.selector), String(a.prop || "y"), a.channel ? String(a.channel) : undefined);
 const fromMs = num(a["from-ms"], -Infinity), toMs = num(a["to-ms"], Infinity);
 series = series.filter(([t]) => t >= fromMs && t <= toMs);
 if (series.length < 4) { console.log("not enough samples (element missing from track, or window too narrow)"); process.exit(1); }
@@ -120,7 +136,7 @@ const result = {
 };
 
 if (a["compare-track"]) {
-  const other = seriesFromTrack(String(a["compare-track"]), String(a.selector), String(a.prop || "y"));
+  const other = seriesFromTrack(String(a["compare-track"]), String(a.selector), String(a.prop || "y"), a["compare-channel"] ? String(a["compare-channel"]) : a.channel ? String(a.channel) : undefined);
   // both tracks have t=0 at their trigger, so compare at the same t (not from each track's first sample)
   const at = (s: [number, number][], t: number) => { let best = s[0]; for (const p of s) if (Math.abs(p[0] - t) < Math.abs(best[0] - t)) best = p; return best[1]; };
   const diffs = series.map(([t, v]) => +(at(other, t) - v).toFixed(2));

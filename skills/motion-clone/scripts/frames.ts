@@ -51,6 +51,6 @@ args.push("-vf", vf.join(","), "-vsync", "0", join(out, "%04d.png"));
 ffmpeg(args, { quiet: true });
 
 const count = readdirSync(out).filter((f) => f.endsWith(".png")).length;
-const meta = { ...info, fps, count, start, end, crop, width: width || info.width, note: "frame i (1-based file name) is at t = start + (i-1)/fps seconds of the source" };
+const meta = { ...info, fps, count, start, end, crop, outWidth: width || undefined, note: "frame i (1-based file name) is at t = start + (i-1)/fps seconds of the source" };
 writeJson(join(out, "frames.json"), meta);
 console.log(JSON.stringify(meta, null, 2));

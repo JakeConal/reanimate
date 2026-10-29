@@ -19,6 +19,7 @@ Reference capture: .motion-clone/<name>/ref  (command: …)
 | # | element | property | from → to | start ms | duration ms | easing | stagger / repeat | source |
 | 1 | h1 | opacity | 0 → 1 | 200 | 700 | cubic-bezier(.16,1,.3,1) | – | inspect.json |
 | 2 | h1 | translateY | 40px → 0 | 200 | 700 | same | – | inspect.json |
+| 2b | canvas card | three:Card.rotation.x | 0 → 0.26 rad | 30 | 630 | ease-in-out (lag 0.004/ms) | follows pointer | gl-track.json + easing.ts --channel |
 | 3 | p | opacity, translateY | 0→1, 30px→0 | 400 | 700 | same | +200 ms after h1 | track.json + easing.ts |
 | 4 | .cta | opacity, translateY | 0→1, 24px→0 | 600 | 600 | same | +200 ms | frames #15–#30 |
 
@@ -36,8 +37,9 @@ what is new, where it lives, how it is kept out of the compared region or why it
 
 1. **`inspect.json › animations`** (websites with CSS/WAAPI motion): `timing.delay`, `timing.duration`, per-keyframe `easing`, `iterations`, `direction`. Transitions show up as `CSSTransition` with `transitionProperty`. Copy them.
 2. **`track.json` + `easing.ts`** (websites, any technology): per element and property, prints delay, visible duration, overshoot and the best-fitting named easing with its fitted duration. Run it for every moving element and property (`translateY`, `opacity`, `scale`, `x`, `w`…). Overshoot > 2 % means a spring or a back easing; note the overshoot percentage and the settle time, the implementation notes say how to map them.
-3. **Frames** (videos, gifs, canvas): for each element find the first frame where it changes and the last frame where it changes; `start = first/fps`, `duration = (last − first + 1)/fps`. Judge the easing from where the midpoint lands: if the element has covered more than half of its distance at a third of the duration it is an ease-out; less than a quarter, an ease-in; symmetric, ease-in-out; constant steps, linear. Overshoot past the final position then return: back/spring. `compare.ts` prints an activity curve per set that shows these shapes as bars even without a track.
-4. **Staggers**: the gap between the start frames of siblings. Note whether it is a constant (each +80 ms), grows (ease on the stagger), or is per-character/per-word (text reveals).
+3. **`gl-track.json` + `easing.ts --channel`** (canvas, WebGL, 3D, captured with `--gl`): uniforms and scene-graph values (camera, object transforms, material uniforms) per rendered frame. `gl.ts summary` lists the animated ones by kind (`clock`, `transition`, `there-and-back`, `oscillation`, `steps`) with their change windows, and the fixed uniforms are constants to copy as they are. See `references/webgl.md`.
+4. **Frames** (videos, gifs, and canvas when there is no trace): for each element find the first frame where it changes and the last frame where it changes; `start = first/fps`, `duration = (last − first + 1)/fps`. Judge the easing from where the midpoint lands: if the element has covered more than half of its distance at a third of the duration it is an ease-out; less than a quarter, an ease-in; symmetric, ease-in-out; constant steps, linear. Overshoot past the final position then return: back/spring. `compare.ts` prints an activity curve per set that shows these shapes as bars even without a track.
+5. **Staggers**: the gap between the start frames of siblings. Note whether it is a constant (each +80 ms), grows (ease on the stagger), or is per-character/per-word (text reveals).
 
 ## Patterns worth recognising
 
@@ -58,6 +60,10 @@ Most landing-page motion is one of these; naming it saves rounds.
 | spring | overshoots then settles, sometimes twice | stiffness/damping; see implementation notes |
 | loader / skeleton pulse | opacity or gradient position oscillates | period 1–2 s, ease-in-out, infinite alternate |
 | page transition | old view exits, new view enters, often with a shared element | 300–600 ms, exit shorter than enter |
+| shader clock | a canvas that never rests; a `clock` channel such as `u_time` | its rate (+1000/s = ms, +1/s = seconds) and the shader that uses it |
+| uniform tween | a `transition` channel on a uniform (`u_hover`, `u_progress`) | duration and easing like any tween; the shader maps 0→1 to pixels |
+| pointer lag (WebGL) | a value chasing the pointer, slower for longer moves | per-frame or per-ms rate `k`; `x += (target − x)·k` |
+| keyframed model (glTF) | an `AnimationMixer` in `gl.ts summary` | clip name, duration, loop, timeScale: play the same clip |
 
 ## How to read a sheet
 

@@ -129,33 +129,17 @@ blockquote.rule cite { display: block; margin-top: 6px; color: var(--muted); fon
 /* ---------- figures ---------- */
 
 .figure { margin: 34px 0 0; }
-.figure--wide { margin-right: calc(-1 * var(--side) - 56px); }
-@media (max-width: 900px) { .figure--wide { margin-right: 0; } }
 .figure__caption { margin-top: 10px; font-size: 12.5px; color: var(--muted); display: flex; justify-content: space-between; gap: 16px; }
 .figure__caption button, .figure__caption a { color: var(--muted); font-size: 12.5px; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-color: var(--faint); text-underline-offset: 3px; white-space: nowrap; font-family: inherit; }
 .figure__caption button:hover, .figure__caption a:hover { color: var(--fg); }
 
-.live { position: relative; overflow: hidden; background: #fff; border-radius: 10px; box-shadow: 0 0 0 1px var(--rule); }
-.live iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; background: #fff; }
-.live__badge { position: absolute; left: 12px; bottom: 10px; z-index: 1; font-size: 11px; letter-spacing: 0.02em; color: var(--muted); background: rgba(255,255,255,0.85); padding: 2px 7px; border-radius: 99px; box-shadow: 0 0 0 1px var(--rule); pointer-events: none; }
-.live__badge b { display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: #16a34a; vertical-align: 1px; }
-
-.compare { position: relative; overflow: hidden; border-radius: 10px; box-shadow: 0 0 0 1px var(--rule); background: #fff; touch-action: pan-y; cursor: ew-resize; user-select: none; }
-.compare video { display: block; width: 100%; height: auto; }
-.compare__top { position: absolute; inset: 0; }
-.compare__line { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--fg); pointer-events: none; }
-.compare__line::after { content: "↔"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 28px; height: 28px; border-radius: 50%; background: var(--fg); color: #fff; font-size: 13px; display: grid; place-items: center; }
-.compare__label { position: absolute; top: 10px; font-size: 11px; padding: 2px 8px; border-radius: 99px; background: rgba(23,23,23,0.82); color: #fff; pointer-events: none; }
-.compare__label--left { left: 10px; }
-.compare__label--right { right: 10px; }
-.compare input[type="range"] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
+/* the original and the clone in one video: side by side, labelled underneath */
+.compare { display: block; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 0 0 1px var(--rule); background: #f9fbfe; }
+.figure__caption--pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.livecard { display: flex; justify-content: center; overflow: hidden; border-radius: 10px; background: #131316; }
+.livecard iframe { flex: none; border: 0; transform-origin: top center; }
 
 .sheet { display: block; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 0 0 1px var(--rule); }
-
-/* card sections: live card next to its comparison */
-.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
-@media (max-width: 640px) { .pair { grid-template-columns: 1fr; } }
-.pair__label { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
 
 /* ---------- install / commands ---------- */
 
@@ -163,12 +147,58 @@ blockquote.rule cite { display: block; margin-top: 6px; color: var(--muted); fon
 .cmd span::before { content: "$ "; color: #8a8a8a; }
 .cmd button { flex: none; background: #2a2a2a; color: #d4d4d4; border: 0; border-radius: 5px; padding: 4px 9px; font: inherit; font-size: 12px; cursor: pointer; }
 .cmd button:hover { background: #3a3a3a; color: #fff; }
+.lede + .cmd { margin-top: 22px; }
+.main > p.hint { margin: 10px 0 0; font-size: 13.5px; color: var(--muted); }
 
-.prompts { margin-top: 22px; display: flex; flex-direction: column; gap: 14px; }
-.prompt__label { font-size: 12.5px; color: var(--muted); margin-bottom: 5px; }
-.prompt__text { padding: 11px 14px; border-radius: 8px; background: var(--panel); box-shadow: 0 0 0 1px var(--rule); font-size: 14px; }
-.prompt__text .slash { font-family: var(--font-mono), monospace; font-size: 0.9em; color: var(--accent); margin-right: 6px; }
-.prompt__text b { font-weight: 600; }
+/* prompts: one panel, label column on the left */
+.prompts { margin-top: 20px; padding: 6px 16px; border-radius: 10px; background: var(--panel); box-shadow: 0 0 0 1px var(--rule); }
+.prompts > div { display: grid; grid-template-columns: 104px 1fr; gap: 12px; padding: 10px 0; font-size: 14px; }
+.prompts > div + div { border-top: 1px solid #f0f0ee; }
+.prompt__label { color: var(--muted); font-size: 13px; }
+.prompt__text .slash { color: var(--faint); }
+.prompt__text code { background: #f0f0ee; padding: 1px 5px; border-radius: 4px; }
+@media (max-width: 520px) { .prompts > div { grid-template-columns: 1fr; gap: 2px; } }
+
+/* example thumbnails at the top of the examples, one per example */
+.strip { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.strip a { display: block; width: 96px; height: 72px; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 0 0 1px var(--rule); transition: box-shadow 0.2s; }
+.strip a:hover { box-shadow: 0 0 0 1px var(--faint); }
+.strip img { width: 100%; height: 100%; object-fit: cover; object-position: center 62%; display: block; }
+
+/* numbered steps */
+.steps { list-style: none; margin: 22px 0 0; padding: 0; border-top: 1px solid var(--rule); }
+.steps li { display: grid; grid-template-columns: 28px 1fr; gap: 8px; padding: 11px 0; border-bottom: 1px solid var(--rule); }
+.steps__n { color: var(--faint); font-size: 13.5px; font-variant-numeric: tabular-nums; padding-top: 1px; }
+.steps p { margin: 0; color: #404040; }
+.steps b { color: var(--fg); font-weight: 600; }
+
+/* examples */
+.example__head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.example h3 span { font-weight: 400; color: var(--muted); }
+.example .figure { margin-top: 16px; }
+
+/* "details": what an example does and its numbers, on hover or focus */
+.tip { position: relative; flex: none; }
+.tip__btn { font: inherit; font-size: 12.5px; color: var(--muted); background: none; border: 0; padding: 0; cursor: help; text-decoration: underline dotted var(--faint); text-underline-offset: 3px; }
+.tip:hover .tip__btn, .tip:focus-within .tip__btn { color: var(--fg); }
+.tip__box {
+  position: absolute; z-index: 30; right: 0; top: calc(100% + 8px); width: 320px; padding: 14px 16px 4px;
+  background: #fff; border-radius: 10px; box-shadow: 0 0 0 1px var(--rule), 0 12px 32px -10px rgb(0 0 0 / 0.18);
+  font-size: 13px; line-height: 1.5; color: #404040;
+  opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity 0.15s, transform 0.15s, visibility 0.15s;
+}
+.tip__box::before { content: ""; position: absolute; left: 0; right: 0; top: -8px; height: 8px; } /* keeps the hover across the gap */
+.tip:hover .tip__box, .tip:focus-within .tip__box { opacity: 1; visibility: visible; transform: none; }
+.tip__box p { margin: 0 0 10px; }
+.tip__note { color: var(--muted); }
+.tip__rows { margin: 0; border-top: 1px solid var(--rule); }
+.tip__rows div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--rule); }
+.tip__rows div:first-child { border-top: 0; }
+.tip__rows dt { font-weight: 600; color: var(--fg); }
+.tip__rows dt span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); }
+.tip__rows dd { margin: 0; white-space: nowrap; color: var(--fg); font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { .tip__box { transition: none; } }
+.figure--sheet { max-width: 420px; }
 
 /* FAQ */
 .faq { margin-top: 22px; border-top: 1px solid var(--rule); }

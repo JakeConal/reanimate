@@ -1,6 +1,6 @@
 # Launch drafts
 
-Replace `<site>` with the deployed URL. Attach `public/og.png`, or better, one of the comparison recordings (`public/media/hover-issuing-*.mp4` side by side, or the README's animated webps).
+Replace `<site>` with the deployed URL. Attach `public/og.png`, or better, one of the comparison recordings (`public/media/stripe-issuing/compare.mp4`, or the README's `.github/assets/entrance.webp` and `hover.webp`).
 
 ## X / Threads / Bluesky
 
@@ -10,7 +10,7 @@ Replace `<site>` with the deployed URL. Attach `public/og.png`, or better, one o
 >
 > It rebuilt three cards from the stripe.com homepage, WebGL included, and measured every one against the original: timing within 43 ms, tilt within 0.4 px.
 >
-> npx skills add NiazMorshed2007/motion-clone
+> npx skills add NiazMorshed2007/motion-clone -g
 > <site>
 
 **Thread**
@@ -19,7 +19,7 @@ Replace `<site>` with the deployed URL. Attach `public/og.png`, or better, one o
 2. Copying motion by eye always ends the same way: looks right in a screenshot, feels off in motion. The easing is sharper, something starts a beat late. motion-clone measures instead: it records the reference, writes every timing and easing down, builds, records the copy the same way and compares.
 3. The loop doesn't end until the numbers agree: timing error, pixel mismatch, easing fit, side-by-side sheets. If a row still fails after 5 rounds it says so, with the numbers. [image: comparison sheet]
 4. Works from a live URL, a screen recording, an mp4 or a gif. Say "match it exactly" for pixel-level, or "clone X and add Y" to mix in your own parts. It writes in whatever your project already uses.
-5. Install: npx skills add NiazMorshed2007/motion-clone. Live demos (the clones run in the page, hover them): <site>
+5. Install: npx skills add NiazMorshed2007/motion-clone -g. Live demos (the clones run in the page, hover them): <site>
 
 ## LinkedIn
 
@@ -27,7 +27,7 @@ Replace `<site>` with the deployed URL. Attach `public/og.png`, or better, one o
 >
 > I built motion-clone, a skill for Claude Code that treats an animation as something to measure. It records the reference (a live site, a video, a gif), reads it frame by frame, rebuilds it in your codebase, then records the copy the same way and compares the two until timing, easing and layout agree.
 >
-> To test it, I had it rebuild three cards from the stripe.com homepage, including two three.js scenes. Every card came back with numbers: chat timing within 43 ms of the original, the card tilt within 0.4 px, the globe's pose exact.
+> To test it, I had it rebuild three cards from the stripe.com homepage, all three of them three.js scenes. Every card came back with numbers: chat timing within 43 ms of the original, the card tilt within 0.4 px, the globe's pose exact.
 >
 > Open source, MIT: <site>
 
@@ -39,9 +39,9 @@ Replace `<site>` with the deployed URL. Attach `public/og.png`, or better, one o
 
 > Hi HN. motion-clone is a skill (a folder of instructions and scripts) for Claude Code. You point it at an animation on a site, in a video or in a gif, and it records it with Playwright, writes a spec (one row per element per property: start, duration, easing), rebuilds it in your stack, then records the clone with the same command and compares: timing error, pixel mismatch per frame, easing curve fits, and side-by-side sheets. It iterates until the rows pass, and reports any that don't after five rounds.
 >
-> The demo page has three cards from stripe.com rebuilt by it, running live, next to recordings of the originals. Two of them are three.js scenes, so it had to recover shaders and timings from the page's scripts rather than from CSS.
+> The demo page has three cards from stripe.com rebuilt by it, running live, next to recordings of the originals. All three are three.js scenes, so it had to recover shaders and timings from what the page sent to the GPU rather than from CSS.
 >
-> Limits: WebGL is compared as pixels, random content is judged against two recordings of the reference, and headless WebGL frame pacing differs from a real screen. Install with `npx skills add NiazMorshed2007/motion-clone`.
+> Limits: pages behind a login need a screen recording, physics springs are fitted from their overshoot rather than read from the source, and web workers' own clocks still run in real time. Install with `npx skills add NiazMorshed2007/motion-clone -g`.
 
 ## Where to post
 

@@ -29,7 +29,8 @@ Triggers:
 Useful options:
 
 - `--pre-js "document.querySelector('.cookie button')?.click()"` dismisses overlays or opens the state you need before the trigger.
-- `--playback-rate 0.25` slows CSS animations and transitions 4x (CDP). The frames then have 4x the time resolution (`--fps 100` works). JS-driven motion ignores it.
+- `--playback-rate 0.25` slows CSS animations and transitions 4x (CDP). The frames then have 4x the time resolution (`--fps 100` works). JS-driven motion ignores it; use `--clock virtual` for that.
+- `--clock virtual` runs the page on a clock the capturer advances frame by frame, so every frame is exact (any `--fps`, for CSS and JS motion alike) and repeated captures are identical. `--seed N` seeds `Math.random`. Use both for canvas, WebGL, particles, and anything random or heavy; see `references/webgl.md`.
 - `--reduced-motion reduce` shows what the site does for users who turn motion off; clone that path too when the project cares about accessibility.
 - `--color-scheme dark` when the reference is dark-mode.
 - `--clip x,y,w,h` when the element grows or moves outside its initial box; measure the box on `final.png`.
@@ -43,10 +44,17 @@ What you get and what each is for:
 | `inspect.json › keyframes` | `@keyframes` rules found in reachable stylesheets (cross-origin sheets are listed as unreadable). |
 | `inspect.json › nodes` | rect and the motion-relevant computed styles of up to 150 nodes under the target: fonts, colours, radii, shadows, overflow, transforms. The static side of the spec. |
 | `inspect.json › libs` | gsap, framer-motion, lottie, webgl, lenis, webflow, scroll-driven CSS… tells you where the motion is defined and which capture limits apply. |
+| `inspect.json › canvases` | every canvas with its context type (`webgl2`, `2d`, `webgpu`), drawing-buffer size and CSS box. |
 | `track.json` | one sample per animation frame (≈16 ms) per tracked selector: `x y w h opacity transform`. Feed it to `easing.ts`. |
 | `frames/` + `frames.json` | the pictures; `triggerFrame` is where t=0 of the motion sits. |
+| `gl/`, `gl-track.json`, `three/` (`--gl`) | shaders, programs, draw calls, passes, textures, scene graphs and every animated uniform or scene value as a channel; `bun gl.ts summary <out>` reads it. See `references/webgl.md`. |
+| `assets/` (`--assets`) | the page's models, scene files, shader files, sampled textures and scripts. |
 
-Limits: WebGL and canvas content is captured as pixels only (no track); iframes are not inspected; sites that block headless browsers need a real browser (see below) or a screen recording.
+## Canvas, WebGL and 3D
+
+Add `--clock virtual --gl` (and `--assets` when the scene loads files) to the capture of anything drawn on a canvas, then read `gl/summary.md`. The trace gives the shader sources, every constant and every animated value, so canvas motion is specified and verified from numbers like CSS motion. `references/webgl.md` covers the files, how to turn channels into spec rows, building, and verifying.
+
+Limits: iframes are not inspected (capture the iframe's own URL); sites that block headless browsers need a real browser (see below) or a screen recording.
 
 ### Through a real browser instead
 
@@ -75,4 +83,4 @@ bun <skill>/scripts/sheet.ts filmstrip --frames .motion-clone/<name>/ref/frames 
 
 ## Capturing the clone
 
-Reuse the reference command verbatim, swapping `--url` and `--out`. If the reference came from a video, capture the clone with `capture.ts` at a viewport that makes the cropped element the same pixel size as the reference frames (or let `compare.ts` rescale, which is slightly lossy). Always keep `--fps`, `--duration`, `--pre-roll`, trigger and scroll parameters identical.
+Reuse the reference command verbatim, swapping `--url` and `--out`. If the reference came from a video, capture the clone with `capture.ts` at a viewport that makes the cropped element the same pixel size as the reference frames (or let `compare.ts` rescale, which is slightly lossy). Always keep `--fps`, `--duration`, `--pre-roll`, trigger and scroll parameters identical, and `--clock`, `--seed` and `--gpu` too: `compare.ts` reads both `capture.json` files and warns when they differ.

@@ -1,6 +1,6 @@
 ---
 name: motion-clone
-description: Clone a section, widget, page or animation from any reference (a live website URL, a screen recording, an mp4/mov/webm, a gif, a Lottie file, a prototype export) frame by frame into the user's own codebase, then record the clone and verify it against the reference frame by frame, iterating until timing, easing, sequence and layout match. Use whenever the user wants to clone, copy, replicate, recreate, port or "steal" a hero, section, widget, marquee, carousel, hover effect, page transition, loader, scroll animation or interaction from a site or video, says "make it look/feel/move like this", "same animation as", "match this exactly", or hands over a gif/video and asks to build it, including when they also want to add their own content, colours or extra features on top, or only want part of the reference (one section, one widget, a few seconds). Pixel-level matching of fonts, colours and spacing is done only when they ask for it.
+description: Clone a section, widget, page or animation from any reference (a live website URL, a screen recording, an mp4/mov/webm, a gif, a Lottie file, a prototype export) frame by frame into the user's own codebase, then record the clone and verify it against the reference frame by frame, iterating until timing, easing, sequence and layout match. Use whenever the user wants to clone, copy, replicate, recreate, port or "steal" a hero, section, widget, marquee, carousel, hover effect, page transition, loader, scroll animation or interaction from a site or video, says "make it look/feel/move like this", "same animation as", "match this exactly", or hands over a gif/video and asks to build it, including when they also want to add their own content, colours or extra features on top, or only want part of the reference (one section, one widget, a few seconds). Covers canvas, WebGL, WebGPU and three.js / 3D scenes (shaders, particles, globes, glTF models) as well as CSS and JS motion. Pixel-level matching of fonts, colours and spacing is done only when they ask for it.
 ---
 
 # motion-clone
@@ -49,13 +49,14 @@ Read `references/capture.md` for the recipe for your source type. In short:
 
 - **Website**: `capture.ts --url … --out ref --selector <section> --trigger load|scroll|hover|click|none --duration … --track "<moving elements>"`. You get `video.webm`, `frames/`, `inspect.json` (declared animations, keyframes, computed styles, fonts, detected libraries) and `track.json` (per animation frame position, size, opacity, transform of each tracked element). For CSS/WAAPI motion `inspect.json` often contains the exact durations, delays and easings: use them, it beats estimating.
 - **Video or gif**: `frames.ts --in file --out ref/frames --fps 10..30 --start … --end … --crop …`. Probe first with `--probe`, then view a few frames to find the crop of the widget you are cloning.
+- **Canvas, WebGL, WebGPU, 3D** (`inspect.json › canvases` shows one, or the page uses three.js, Pixi, Babylon, Spline…): add `--clock virtual --gl --assets` to the capture and read `gl/summary.md` (`gl.ts summary <out>`). You get the shader sources, every constant uniform, the scene graph, the render passes, the textures and models, and each animated uniform or object property as a channel in `gl-track.json`. The virtual clock makes every frame exact and every capture identical, random particles included. Read `references/webgl.md`.
 - **Lottie / Rive / prototype export**: the file is the spec; read it, do not re-derive it from pixels.
 
 Then build labelled sheets and look at them: `sheet.ts filmstrip --frames ref/frames --out ref/sheets`. Read every sheet with the image viewer. This is the frame-by-frame inspection the user asked for; do not skip it or sample only the first sheet.
 
 ### 3. Write the motion spec
 
-Fill `spec.md` using the template in `references/analysis.md`. One row per element per property: trigger, start time, duration, delay or stagger, from → to, easing, notes. Get the numbers from, in order of preference: `inspect.json` animations and keyframes → `easing.ts` on `track.json` → reading frames (first frame where it changes, last frame where it changes, overshoot or not). Also note the static facts the motion depends on: element sizes and positions, z-order, overflow clipping, transform origins, and for pixel-faithful work fonts, colours, spacing and assets.
+Fill `spec.md` using the template in `references/analysis.md`. One row per element per property: trigger, start time, duration, delay or stagger, from → to, easing, notes. Get the numbers from, in order of preference: `inspect.json` animations and keyframes → `easing.ts` on `track.json`, or on `gl-track.json --channel` for canvas → reading frames (first frame where it changes, last frame where it changes, overshoot or not). Also note the static facts the motion depends on: element sizes and positions, z-order, overflow clipping, transform origins, and for pixel-faithful work fonts, colours, spacing and assets.
 
 The spec is the contract between the reference and the clone. Every row becomes a check in step 5. If a row has a "?" you have not finished reading the frames.
 
@@ -75,9 +76,11 @@ bun <skill>/scripts/sheet.ts compare --ref ref/frames --clone clone-N/frames --d
 bun <skill>/scripts/easing.ts --track clone-N/track.json --selector "<el>" --prop <translateY|opacity|…> --compare-track ref/track.json
 ```
 
+For canvas work, also run `gl.ts compare --ref ref --clone clone-N`, which checks canvas settings, draw structure and every animated channel.
+
 Read `references/verify.md` for how to read the report, the pass criteria for each fidelity level and the fixes that each kind of failure usually needs. Look at the compare sheets yourself, every round; the numbers tell you that something is off, the sheets tell you what.
 
-Loop until every spec row passes. Each round: change the smallest thing the evidence points at, re-capture, re-compare. Expect 2 to 5 rounds. If after 5 rounds a row still fails, stop and report it with its numbers and the reason (missing font, WebGL, a physics spring you approximated), do not quietly lower the threshold or drop the row.
+Loop until every spec row passes. Each round: change the smallest thing the evidence points at, re-capture, re-compare. Expect 2 to 5 rounds. If after 5 rounds a row still fails, stop and report it with its numbers and the reason (missing font, a shader or model the user may not copy, a physics spring you approximated), do not quietly lower the threshold or drop the row.
 
 ### 6. Report
 
@@ -98,3 +101,5 @@ The final message must stand alone:
 - Scroll-driven motion: it is a function of scroll position, not time. Capture both with the same `--scroll-steps` and `--scroll-ms`, and compare per scroll position (the track's `scrollY`), not per second.
 - JS libraries (GSAP, Framer Motion springs): `--playback-rate` does not slow them. Use `track.json` and `easing.ts` (it reports overshoot and "spring-like") and tune spring parameters by the overshoot and settle time.
 - Videos of someone else's screen have a cursor, a browser chrome and compression noise: crop them out and raise `--pixel-threshold` a little (0.15) rather than chasing noise.
+- Canvas and WebGL captured on the real clock: frames drop in software GL and random content differs on every load, so the comparison measures the machine. Capture both sides with `--clock virtual` and the same `--seed`.
+- Rebuilding a shader from screenshots: the trace already has its source and every constant. Read `gl/shaders/` and the fixed uniforms before writing GLSL.

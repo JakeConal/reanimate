@@ -47,6 +47,8 @@ const child = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transit
 
 **Loops and idle**: `animation-iteration-count: infinite; animation-direction: alternate` for pulses; measure one period from the activity curve.
 
+**Canvas, WebGL, 3D**: rebuild from the trace, not from the pixels (`references/webgl.md › Building`). Use the same engine and version, renderer settings and context attributes, port the user-authored shaders with their fixed uniforms, map the traced blend state to the material, and drive each animated uniform with the timing and easing its channel showed. A per-frame lag `x += (target − x) · k` stays frame-rate independent as `x += (target − x) · (1 − (1 − k) ** (dt / 16.67))`.
+
 ## Details that make or break the match
 
 - `transform-origin`: scale-ins grow from the anchor (a menu from its button corner, a modal from centre). Read `nodes › transform-origin` in `inspect.json` if it was non-default.

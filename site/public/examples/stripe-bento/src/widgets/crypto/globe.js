@@ -790,7 +790,7 @@ export class Globe {
     }
   }
 
-  applyDragRelease({ speedX, speedY }) {
+  applyDragRelease({ speedY }) {
     const tilts = this.dragRotate === "x" || this.dragRotate === "both";
     if (this.dragRotate === "y" || this.dragRotate === "both") {
       this.currentRotationSpeedY = Math.abs(speedY) > 5e-5 ? speedY : this.getAutoRotateTargetY();

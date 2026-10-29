@@ -6,7 +6,7 @@
 import { chromium } from "playwright";
 import { join, basename } from "node:path";
 import { existsSync, readFileSync } from "node:fs";
-import { abs, ensureDir, listFrames, num, parseArgs, readJson, usage } from "./lib.ts";
+import { abs, ensureDir, listFrames, num, pad, parseArgs, readJson, usage } from "./lib.ts";
 
 const HELP = `
 sheet.ts — labelled contact sheets.
@@ -27,9 +27,11 @@ const mode = a._[0];
 if (a.help || !mode || !a.out) usage(HELP);
 const out = ensureDir(abs(String(a.out)));
 
+// frames.ts writes frames.json beside the frames, capture.ts one level up
 function fpsOf(dir: string, fallback: number) {
-  const j = join(dir, "frames.json");
-  if (existsSync(j)) { const m = readJson(j); if (m.fps) return Number(m.fps); }
+  for (const j of [join(dir, "frames.json"), join(dir, "..", "frames.json")]) {
+    if (existsSync(j)) { const m = readJson(j); if (m.fps) return Number(m.fps); }
+  }
   return fallback;
 }
 const label = (i: number, fps: number) => `#${i}  ${(i / fps).toFixed(2)}s`;
@@ -64,24 +66,25 @@ if (mode === "filmstrip") {
   const fps = num(a.fps, fpsOf(refDir, 25));
   const every = num(a.every, 1), per = num(a["per-sheet"], 8), width = num(a.width, 420), offset = num(a.offset, 0);
   const ref = listFrames(refDir), clone = listFrames(cloneDir);
-  const diffs = diffDir ? listFrames(diffDir) : [];
+  const hasDiffs = !!diffDir && listFrames(diffDir).length > 0;
   let report: any = null;
   if (diffDir && existsSync(join(diffDir, "..", "report.json"))) report = readJson(join(diffDir, "..", "report.json"));
   const n = Math.min(ref.length, clone.length - Math.max(0, offset));
   const idx: number[] = [];
-  const from = num(a.from, 0), to = num(a.to, n - 1);
+  const from = num(a.from, Math.max(0, -offset)), to = num(a.to, n - 1);
   for (let i = from; i <= to && i < n; i += every) idx.push(i);
-  const ncol = diffs.length ? 3 : 2;
+  const ncol = hasDiffs ? 3 : 2;
   for (let s = 0; s * per < idx.length; s++) {
     const chunk = idx.slice(s * per, (s + 1) * per);
     const rows = chunk.map((i) => {
       const c = clone[i + offset];
-      const d = diffs[i];
-      const mm = report?.frames?.[i]?.mismatch;
+      // compare.ts names each diff after its reference frame and skips frames without a clone frame
+      const d = hasDiffs ? join(diffDir!, `${pad(i)}.png`) : undefined;
+      const mm = report?.frameDetails?.[i]?.mismatch ?? undefined;
       const cap = `${label(i, fps)}${mm !== undefined ? ` · mismatch ${(mm * 100).toFixed(1)}%` : ""}`;
-      return `<div class="cap">${cap}</div><div class="row" style="grid-template-columns:repeat(${ncol},${width}px)"><img src="${fileUrl(ref[i])}" style="width:${width}px"><img src="${c ? fileUrl(c) : ""}" style="width:${width}px">${d ? `<img src="${fileUrl(d)}" style="width:${width}px">` : ""}</div>`;
+      return `<div class="cap">${cap}</div><div class="row" style="grid-template-columns:repeat(${ncol},${width}px)"><img src="${fileUrl(ref[i])}" style="width:${width}px"><img src="${c ? fileUrl(c) : ""}" style="width:${width}px">${d && existsSync(d) ? `<img src="${fileUrl(d)}" style="width:${width}px">` : ""}</div>`;
     }).join("");
-    sheets.push({ name: `compare-${String(s + 1).padStart(2, "0")}.png`, html: `<style>${css}</style><p class="hdr">reference vs clone${diffs.length ? " vs diff" : ""} · ${fps} fps · clone offset ${offset}</p><div class="colhdr" style="grid-template-columns:repeat(${ncol},${width}px)"><div>reference</div><div>clone</div>${diffs.length ? "<div>diff (red = differs)</div>" : ""}</div>${rows}` });
+    sheets.push({ name: `compare-${String(s + 1).padStart(2, "0")}.png`, html: `<style>${css}</style><p class="hdr">reference vs clone${hasDiffs ? " vs diff" : ""} · ${fps} fps · clone offset ${offset}</p><div class="colhdr" style="grid-template-columns:repeat(${ncol},${width}px)"><div>reference</div><div>clone</div>${hasDiffs ? "<div>diff (red = differs)</div>" : ""}</div>${rows}` });
   }
 } else usage(HELP);
 
