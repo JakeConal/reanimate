@@ -12,7 +12,7 @@ const siteUrl = process.env.SITE_URL || "http://localhost:3000";
 
 const title = "reanimate · a skill for Claude Code";
 const description =
-  "Point Claude at any animation, on a live site, in a video or a gif, and it rebuilds it frame by frame in your codebase, then records the copy and compares the two until they move the same.";
+  "Point Claude at an animation you like, on a live site, in a video or a gif, and it rebuilds it in your codebase as a starting point for your own.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

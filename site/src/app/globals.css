@@ -103,10 +103,6 @@ ul.list li + li { margin-top: 8px; }
 .section__head::after { content: ""; order: 1; flex: 1; height: 1px; background: var(--rule); }
 .section__head .num { order: 2; color: var(--muted); }
 
-blockquote.rule { margin: 26px 0 0; padding: 0 0 0 18px; border-left: 2px solid var(--fg); }
-blockquote.rule p { margin: 0; font-size: 17px; }
-blockquote.rule cite { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; font-style: normal; }
-
 /* key/value table */
 .kv { width: 100%; margin-top: 26px; border-collapse: collapse; }
 .kv tr { border-top: 1px solid var(--rule); }
@@ -199,14 +195,5 @@ blockquote.rule cite { display: block; margin-top: 6px; color: var(--muted); fon
 .tip__rows dd { margin: 0; white-space: nowrap; color: var(--fg); font-variant-numeric: tabular-nums; }
 @media (prefers-reduced-motion: reduce) { .tip__box { transition: none; } }
 .figure--sheet { max-width: 420px; }
-
-/* FAQ */
-.faq { margin-top: 22px; border-top: 1px solid var(--rule); }
-.faq details { border-bottom: 1px solid var(--rule); padding: 12px 0; }
-.faq summary { cursor: pointer; font-weight: 500; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
-.faq summary::-webkit-details-marker { display: none; }
-.faq summary::after { content: "+"; color: var(--muted); }
-.faq details[open] summary::after { content: "–"; }
-.faq details p { margin: 8px 0 0; color: #404040; }
 
 .footer { margin-top: 96px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--muted); display: flex; flex-direction: column; gap: 8px; }

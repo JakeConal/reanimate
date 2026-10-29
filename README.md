@@ -1,6 +1,6 @@
 <h1 align="center">reanimate</h1>
 
-<p align="center"><b>Reverse-engineer any animation, frame by frame. Then prove the copy moves the same.</b><br>A Claude Code skill that works from a live site, a screen recording, an mp4, a gif or a Lottie file.</p>
+<p align="center"><b>Reverse-engineer animations you like. Build your own on top.</b><br>A Claude Code skill that works from a live site, a screen recording, an mp4, a gif or a Lottie file.</p>
 
 <p align="center">
   <a href="https://code.claude.com/docs/en/skills"><img src="https://img.shields.io/badge/Claude_Code-skill-171717?style=flat-square&logo=claude&logoColor=white" alt="Claude Code skill"></a>
@@ -14,9 +14,11 @@
 </p>
 <p align="center"><sub>Three cards from stripe.com. Top: the original. Bottom: the copy, filmed the same way.</sub></p>
 
-Copying an animation by eye always ends the same way. It looks right in a screenshot and feels off in motion: the easing is a little sharp, the second line starts a beat late, the card lifts four pixels instead of six. Nobody can say what's wrong, so nobody fixes it.
+A lot of good ideas start on someone else's site: a hover, a hero entrance, a card that does something nice. Ask an agent to rebuild one from a link or a screenshot, and it usually makes one pass, calls it done, and isn't close. A screenshot doesn't carry motion, and the agent has no way to tell how far off it is.
 
-reanimate measures instead. Claude films the original, writes down every timing and easing, rebuilds the animation in your code, films the copy the same way, and compares the two until the numbers agree. You get the code and the evidence.
+reanimate gives it a target and a way to check. Claude films the original (a live site, a screen recording or a gif), writes down the timings and easings from the frames, rebuilds the animation with what your project already uses, films its version the same way and compares the two.
+
+That comparison is what keeps it going. An agent will keep working for as long as each round tells it what's still off and what "close enough" means. So it fixes the biggest difference, films again, and stops when the numbers match, not when the first try looks plausible. You end up with a close starting point in your own code, ready for your content, your colours and your own ideas.
 
 ## Install
 
@@ -40,15 +42,15 @@ Needs [Bun](https://bun.sh) 1.1 or later, on macOS or Linux (Windows is untested
 1. **Record.** It films the reference in a headless browser at a fixed viewport and frame rate: a video, numbered frames, every CSS and Web Animations API animation it finds, and the position of chosen elements on every frame. For canvas and WebGL it also traces the GPU calls (shaders, uniforms, draw calls, the three.js scene) on a virtual clock that makes every capture identical.
 2. **Spec.** One row per element per property: start, duration, from → to, easing, stagger. A row with a "?" means the frames haven't been read yet.
 3. **Build.** It writes the animation with what your project already uses: CSS, Framer Motion, GSAP, three.js.
-4. **Verify.** It films the clone with the exact same command, then compares timing, pixels and easing curves and makes side-by-side sheets.
-5. **Repeat.** It fixes the smallest thing the evidence points at and films again, usually 2 to 5 rounds. A row that still fails after 5 is reported with its numbers and the reason.
+4. **Verify.** It films the copy the same way, compares timing, easing and pixels, and makes side-by-side sheets.
+5. **Repeat.** It fixes the biggest difference and films again, usually 2 to 5 rounds. Whatever still doesn't match after 5 is listed in its report, with the reason.
 
 <p align="center">
   <img src=".github/assets/hover.webp" width="520" alt="The card issuing card hovered on stripe.com and in the copy, side by side: the same pointer path makes the Visa card tilt the same way in both.">
 </p>
 <p align="center"><sub>The same pointer path on stripe.com and on the copy. The tilt settles within 0.4 px.</sub></p>
 
-How close the copy has to be depends on your words:
+By default it matches the motion and leaves the look to you. Ask for more or less:
 
 | Say | Level | Must match |
 |---|---|---|

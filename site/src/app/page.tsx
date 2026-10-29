@@ -13,7 +13,6 @@ const sections: NavItem[] = [
   { id: "use", label: "Using it" },
   { id: "close", label: "How close" },
   { id: "limits", label: "Limits" },
-  { id: "questions", label: "Questions" },
   { id: "examples", label: "Examples" },
 ];
 
@@ -21,8 +20,8 @@ const steps: [string, string][] = [
   ["Record.", "It films the original in a real browser, at a fixed size and frame rate, and collects every animation the page declares."],
   ["Write it down.", "One row per moving part: when it starts, how long it takes, how far it goes, on which curve."],
   ["Rebuild.", "In your code, with what the project already uses: CSS, Framer Motion, GSAP, three.js."],
-  ["Compare.", "It films the copy with the exact same command, so any difference is in the copy, not the camera. Then it compares timing, pixels and easing curves."],
-  ["Repeat.", "It fixes the biggest gap and films again, usually two to five rounds. Anything still failing is reported with its numbers."],
+  ["Compare.", "It films the copy the same way and compares timing, easing and pixels."],
+  ["Repeat.", "It fixes the biggest difference and films again, usually two to five rounds. Whatever still doesn’t match is listed in its report."],
 ];
 
 const prompts: [string, React.ReactNode][] = [
@@ -30,13 +29,6 @@ const prompts: [string, React.ReactNode][] = [
   ["From a video", <>this loader, 0:03 to 0:05 of ~/Downloads/loader.mov</>],
   ["Pixel-exact", <>the card hover in this gif, <code>match it exactly</code></>],
   ["Add your own", <>the logo marquee on https://example.com, <code>with our logos and pause on hover</code></>],
-];
-
-const faq: [string, string][] = [
-  ["Does it copy the other site’s code?", "It reads what the browser receives: CSS, keyframes and, for canvas, what the page sends to the GPU. Then it writes its own version in your stack. Licences still apply to whatever you copy."],
-  ["Which frameworks does it write?", "Whatever your project already uses. It reads package.json and your components first, and won’t add GSAP to a project that animates with CSS."],
-  ["Can it clone scroll animations?", "Yes. Scroll-linked motion is compared by scroll position instead of time."],
-  ["What if something won’t match?", "After five rounds it stops and tells you which part failed, with its numbers and the reason. It never quietly lowers the bar."],
 ];
 
 function Section({ id, n, title, children }: { id: string; n: number; title: string; children: React.ReactNode }) {
@@ -109,12 +101,12 @@ export default function Home() {
         </header>
 
         <p className="lede">
-          Point Claude at an animation, and it rebuilds it <em>frame by frame</em>, then proves the copy moves the same.
+          Point Claude at an animation you like on another site, and it rebuilds it in your code for you to build on.
         </p>
 
         <CopyCommand command={INSTALL} />
         <p className="hint">
-          Then, in Claude Code, type <code>/reanimate</code> and say what to copy. <a href="#use">How to ask ↓</a>
+          Then, in Claude Code, type <code>/reanimate</code> and say what you want. <a href="#use">How to ask ↓</a>
         </p>
 
         <div className="meta">
@@ -124,10 +116,13 @@ export default function Home() {
         </div>
 
         <p>
-          Copying an animation by eye rarely works. The copy looks right in a screenshot and feels off in motion: the easing is a bit sharper, a line starts a beat late. Nobody can say what’s wrong, so nobody fixes it.
+          A lot of good ideas start on someone else’s site: a hover, a hero entrance, a card that does something nice. Ask an agent to rebuild one from a link or a screenshot, and it usually makes one pass, calls it done, and isn’t close. A screenshot doesn’t carry motion, and the agent has no way to tell how far off it is.
         </p>
         <p>
-          reanimate <em>measures</em> instead. Claude records the original, whether it’s a live site, a screen recording or a gif, writes down every timing and easing, and rebuilds it in your code. Then it records the copy the same way and compares the two until the numbers agree.
+          reanimate gives it a target and a way to check. It records the original, whether it’s a live site, a screen recording or a gif, and Claude writes down the timings and easings from the frames. It rebuilds the animation with what your project already uses, records its version the same way, and compares the two.
+        </p>
+        <p>
+          That comparison is what keeps it going. An agent will keep working for as long as each round tells it what’s still off and what “close enough” means. So it fixes the biggest difference, records again, and stops when the numbers match, not when the first try looks plausible. You end up with a close starting point in your own code, ready for your content, your colours and your own ideas.
         </p>
 
         <figure className="figure">
@@ -143,7 +138,7 @@ export default function Home() {
         </p>
 
         <Section id="how" n={1} title="How it works">
-          <p>Every clone runs the same loop, and it doesn’t stop until the comparison passes.</p>
+          <p>Each rebuild runs the same loop.</p>
           <ol className="steps">
             {steps.map(([title, body], i) => (
               <li key={title}>
@@ -153,20 +148,20 @@ export default function Home() {
             ))}
           </ol>
           <p>
-            For canvas and WebGL, pixels aren’t enough. The skill also records what the page sends to the GPU: shaders, uniforms and the three.js scene, on a clock it steps frame by frame, so two recordings come out identical.
+            For canvas and WebGL it also records what the page sends to the GPU: shaders, uniforms and the three.js scene. The page runs on a clock the skill steps frame by frame, so two recordings come out the same.
             <Sidenote n={2}>Random particles included: it seeds the page’s random numbers too.</Sidenote>
           </p>
           <figure className="figure figure--sheet">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="sheet" src={media("stripe-issuing", "sheet.webp")} alt="A comparison sheet: the card issuing hover on stripe.com, in the copy, and in red the pixels that differ. Only thin outlines of the card's edge and the title differ." width={816} height={975} loading="lazy" />
             <figcaption className="figure__caption">
-              <span>Every round ends with a sheet like this: the original, the copy, and in red the pixels that differ.</span>
+              <span>Each round produces a sheet like this: the original, the copy, and in red the pixels that differ.</span>
             </figcaption>
           </figure>
         </Section>
 
         <Section id="use" n={2} title="Using it">
-          <p>In Claude Code, say what to clone, where it is and where it should go:</p>
+          <p>In Claude Code, say what you want, where it is and where it should go:</p>
           <div className="prompts">
             {prompts.map(([label, text]) => (
               <div key={label}>
@@ -182,7 +177,7 @@ export default function Home() {
         </Section>
 
         <Section id="close" n={3} title="How close">
-          <p>Your words decide how close the copy has to be.</p>
+          <p>By default it matches the motion and leaves the look to you. Ask for more or less:</p>
           <Rows
             rows={[
               ["Moves the same", <>The default. Same trigger, order and timing, within 80 ms, the same kind of easing and distance. Text, colours and fonts can be yours.</>],
@@ -201,18 +196,7 @@ export default function Home() {
           </ul>
         </Section>
 
-        <Section id="questions" n={5} title="Questions">
-          <div className="faq">
-            {faq.map(([q, a]) => (
-              <details key={q}>
-                <summary>{q}</summary>
-                <p>{a}</p>
-              </details>
-            ))}
-          </div>
-        </Section>
-
-        <Section id="examples" n={6} title="Examples">
+        <Section id="examples" n={5} title="Examples">
           <p>
             Hover a clerk.com card to play it; the copies use the free Geist font, so only the lettering differs. For stripe.com and workos.com, the original plays on the left and the copy on the
             right.
