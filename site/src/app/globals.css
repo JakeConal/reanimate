@@ -134,6 +134,9 @@ ul.list li + li { margin-top: 8px; }
 .figure__caption--pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .livecard { display: flex; justify-content: center; overflow: hidden; border-radius: 10px; background: #131316; }
 .livecard iframe { flex: none; border: 0; transform-origin: top center; }
+/* a card plays on hover, or on touch screens while it's on screen and on tap (clerk-bento/src/bento.js) */
+@media (hover: hover) { .on-touch { display: none; } }
+@media (hover: none) { .on-hover { display: none; } }
 
 .sheet { display: block; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 0 0 1px var(--rule); }
 

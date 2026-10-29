@@ -144,6 +144,7 @@ button, input, select, textarea { font: inherit; color: inherit; background-colo
 .clerk-card {
   position: relative;
   isolation: isolate;
+  -webkit-tap-highlight-color: transparent; /* touch screens toggle a card on tap (bento.js) */
   display: flex;
   flex-direction: column;
   border-radius: 16px;
@@ -239,6 +240,10 @@ html[data-card="bot-detection"] .clerk-card--bot-detection,
 html[data-card="passwords"] .clerk-card--passwords,
 html[data-card="api-keys"] .clerk-card--api-keys,
 html[data-card="clerk-cli"] .clerk-card--clerk-cli { display: flex; height: 100%; }
+
+/* ?card=<slug> on a screen narrower than the card: scaled to fit, 16px from the sides (index.html sets --fit) */
+html[data-fit] .clerk-bento { padding: 24px 0; }
+html[data-fit] .clerk-bento__stack { zoom: var(--fit); margin: 0 auto; }
 
 /* ?card=<slug>&embed: the card 24px from every edge, no scrolling (the reanimate site shows it in an iframe) */
 html[data-embed] { overflow: hidden; }

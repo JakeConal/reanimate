@@ -14,6 +14,17 @@
     const card = params.get("card");
     if (card) document.documentElement.dataset.card = card;
     if (card && params.has("embed")) document.documentElement.dataset.embed = "";
+    // without &embed on a screen narrower than the card (a phone), the card is scaled down to fit
+    if (card && !params.has("embed")) {
+      const root = document.documentElement;
+      const fit = () => {
+        const z = Math.min(1, (innerWidth - 32) / parseFloat(getComputedStyle(root).getPropertyValue("--card-w")));
+        root.style.setProperty("--fit", z);
+        root.toggleAttribute("data-fit", z < 1);
+      };
+      fit();
+      addEventListener("resize", fit);
+    }
   </script>
   <script type="module" src="./src/bento.js"></script>
 </head>

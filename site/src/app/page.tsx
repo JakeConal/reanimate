@@ -195,7 +195,7 @@ export default function Home() {
 
         <Section id="examples" n={5} title="Examples">
           <p>
-            Hover a clerk.com card to play it; the copies use the free Geist font, so only the lettering differs. For stripe.com and workos.com, the original plays on the left and the copy on the
+            Hover a clerk.com card to play it, or on a phone just scroll to it. The copies use the free Geist font, so only the lettering differs. For stripe.com and workos.com, the original plays on the left and the copy on the
             right.
           </p>
           <nav className="strip" aria-label="Examples">
@@ -227,7 +227,8 @@ export default function Home() {
                   <LiveCard src={`${e.live}&embed`} width={e.show.width} height={e.show.height} label={`${e.title}, the copy, running live`} />
                   <figcaption className="figure__caption">
                     <span>
-                      the copy, hover it ·{" "}
+                      the copy, <span className="on-hover">hover it</span>
+                      <span className="on-touch">tap it</span> ·{" "}
                       <a href={e.live} target="_blank" rel="noreferrer">
                         open on its own ↗
                       </a>

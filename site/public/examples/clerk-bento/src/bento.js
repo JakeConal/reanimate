@@ -10,6 +10,11 @@
 // With ?card=<slug> only that card's widget is mounted.
 // Progress for recorders: each slot gets data-widget-state="loading" → "mounted" | "static" | "empty" |
 // "error"; when every slot has settled, <html data-widgets="ready"> and window.clerkBento.ready resolves.
+//
+// Touch screens (an addition, clerk.com has none): the cards follow react-aria's useHover, which ignores touch,
+// so on a phone they would never play. Where nothing can hover, a card plays while at least half of it is on
+// screen, stops once it has left, and a tap toggles it. The shell sends the card the events a mouse would and
+// sets .is-hovered for the CSS group-hover parts, so the widgets themselves are unchanged.
 
 const WIDGETS = new URL("./widgets/", import.meta.url);
 
@@ -77,3 +82,22 @@ const ready = Promise.allSettled(slots.map(mountWidget)).then(() => {
   document.documentElement.dataset.widgets = "ready";
 });
 window.clerkBento = { ready };
+
+function playOnScreen(card) {
+  let on = false;
+  const set = (v) => {
+    if (v === on) return;
+    on = v;
+    card.classList.toggle("is-hovered", v);
+    card.dispatchEvent(new PointerEvent(v ? "pointerenter" : "pointerleave", { pointerType: "mouse", isPrimary: true }));
+    card.dispatchEvent(new MouseEvent(v ? "mouseenter" : "mouseleave"));
+  };
+  // iOS sends a real mouseenter on tap and mouseleave on the next tap elsewhere; only the shell's count here
+  for (const type of ["mouseenter", "mouseleave"]) card.addEventListener(type, (e) => e.isTrusted && e.stopImmediatePropagation(), true);
+  new IntersectionObserver(([e]) => (e.intersectionRatio >= 0.5 ? set(true) : !e.isIntersecting && set(false)), { threshold: [0, 0.5] }).observe(card);
+  card.addEventListener("click", () => set(!on));
+}
+
+if (matchMedia("(hover: none)").matches) {
+  ready.then(() => slots.forEach((s) => s.dataset.widgetState === "mounted" && playOnScreen(s.closest(".clerk-card"))));
+}

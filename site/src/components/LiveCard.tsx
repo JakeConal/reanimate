@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// The clone itself, running in the page: hover it to play. Shown at its real size, scaled down only
-// when the column is narrower.
+// The clone itself, running in the page: hover it to play (touch screens play it while it's on screen).
+// Shown at its real size, scaled down only when the column is narrower.
 
 export function LiveCard({ src, width, height, label }: { src: string; width: number; height: number; label: string }) {
   const box = useRef<HTMLDivElement>(null);

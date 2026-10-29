@@ -248,3 +248,7 @@
   .clerk-card--api-keys:hover .ak-sheen { opacity: 1; transition-duration: 1s; }
   .clerk-card--api-keys:hover .ak-pill__text { color: #fff; }
 }
+/* touch screens: bento.js sets .is-hovered while the card plays */
+.clerk-card--api-keys.is-hovered .ak-lid::before { opacity: 0; transition-duration: 0.5s; }
+.clerk-card--api-keys.is-hovered .ak-sheen { opacity: 1; transition-duration: 1s; }
+.clerk-card--api-keys.is-hovered .ak-pill__text { color: #fff; }

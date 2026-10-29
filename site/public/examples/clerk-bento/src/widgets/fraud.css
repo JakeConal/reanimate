@@ -108,3 +108,5 @@
 @media (hover: hover) {
   .clerk-card--fraud:hover .fr-text { color: #fff; }
 }
+/* touch screens: bento.js sets .is-hovered while the card plays */
+.clerk-card--fraud.is-hovered .fr-text { color: #fff; }
