@@ -14,11 +14,9 @@
 </p>
 <p align="center"><sub>Three cards from stripe.com. Top: the original. Bottom: the copy, filmed the same way.</sub></p>
 
-A lot of good ideas start on someone else's site: a hover, a hero entrance, a card that does something nice. Ask an agent to rebuild one from a link or a screenshot, and it usually makes one pass, calls it done, and isn't close. A screenshot doesn't carry motion, and the agent has no way to tell how far off it is.
+A lot of good ideas start on someone else's site. Ask an agent to rebuild one from a link or a screenshot and it makes one pass, calls it done, and misses. It can't see the motion or tell how far off it is.
 
-reanimate gives it a target and a way to check. Claude films the original (a live site, a screen recording or a gif), writes down the timings and easings from the frames, rebuilds the animation with what your project already uses, films its version the same way and compares the two.
-
-That comparison is what keeps it going. An agent will keep working for as long as each round tells it what's still off and what "close enough" means. So it fixes the biggest difference, films again, and stops when the numbers match, not when the first try looks plausible. You end up with a close starting point in your own code, ready for your content, your colours and your own ideas.
+reanimate records the original, rebuilds it in your code, then records the copy the same way and compares the two. Each round shows what's still off, so the agent keeps going until the numbers match. You end up with a close starting point to make your own.
 
 ## Install
 
