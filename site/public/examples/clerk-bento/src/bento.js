@@ -27,7 +27,7 @@ function loadCss(slug) {
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = new URL(`${slug}.css`, WIDGETS).href;
-    link.dataset.widget = slug;
+    link.dataset.widgetCss = slug; // not data-widget: that marks the slots
     link.onload = () => resolve(true);
     link.onerror = () => {
       link.remove();

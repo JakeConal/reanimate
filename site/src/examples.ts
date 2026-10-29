@@ -231,6 +231,21 @@ export const examples: Example[] = [
       ["Random lights", "144 lights for 20 s, same random numbers", "0 differ"],
     ],
   },
+  {
+    slug: "clerk-cli",
+    title: "Clerk CLI",
+    source: CLERK,
+    about:
+      "The Clerk logo lights up cyan while light streaks run from the terminal panel into the button and on into a ring of AI-tool logos. Every 1.35 s the logos step one slot round the ring.",
+    note: "The ring keeps its place between hovers, so each visit carries on where the last one stopped.",
+    show: { kind: "live", width: 443, height: 328 },
+    live: "/examples/clerk-bento/?card=clerk-cli",
+    results: [
+      ["Frame match", "pixels that differ in the visual, four hover runs", "≤ 0.01 %"],
+      ["Timing", "start and end of every motion", "0 ms"],
+      ["Logo steps", "position during each step", "0 px"],
+    ],
+  },
 ];
 
 export const media = (slug: string, file: string) => `/media/${slug}/${file}`;

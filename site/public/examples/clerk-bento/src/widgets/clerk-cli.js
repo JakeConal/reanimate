@@ -21,7 +21,11 @@
 //   card is hovered, exit {opacity: 0}. Re-hovering while they fade revives the same instances (and re-renders
 //   them: Meteor's effect re-runs, clock kept); after removal a new hover starts a new clock.
 // - Carousel: setTimeout(550) → setInterval(1350) while hovered; each tick moves logo r to slot (r + step) % 6
-//   (useAnimate sequence, all six at once). `step` persists across hovers.
+//   (useAnimate sequence, all six at once, created on the next frame and back-dated to the tick). `step`
+//   persists across hovers.
+// - Timing (checked frame by frame against clerk.com): hover-in tweens start at the pointer event, the streak
+//   canvases mount on the next frame (their clock starts on the frame after), hover-out is applied on the next
+//   frame with its WAAPI tweens back-dated to the event.
 // - Hover: react-aria useHover on the card root (pointerenter/pointerleave, touch ignored).
 // With prefers-reduced-motion: reduce, hover switches the cyan state instantly and runs no streaks or carousel.
 
