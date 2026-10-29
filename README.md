@@ -100,21 +100,24 @@ Name the thing, where it is and where it should go. Narrow it to one section, on
 
 ## What's inside
 
+This repo holds the skill and the site that shows it off. Only `skills/motion-clone/` is installed by the skills CLI.
+
 | Path | What it is |
 |---|---|
-| `SKILL.md` | The workflow Claude follows: scope, capture, spec, build, verify, report. |
-| `references/` | Capture recipes per source type, how to read frames into a spec, implementation patterns per stack, pass criteria and fixes. |
-| `scripts/capture.ts` | Records a page: video, frames, declared animations, computed styles, fonts, libraries, per-frame element tracks. Triggers: load, scroll, hover, leave, pointer path, drag, click, none. |
-| `scripts/frames.ts` | Extracts and crops frames from a video or gif. |
-| `scripts/compare.ts` | Frame-by-frame comparison: alignment, timing error, mismatch, activity curves, diff images. |
-| `scripts/easing.ts` | Fits a tracked property to named easings, detects overshoot and springs, diffs two tracks. |
-| `scripts/sheet.ts` | Labelled contact sheets and reference / clone / diff comparison sheets. |
+| `skills/motion-clone/SKILL.md` | The workflow Claude follows: scope, capture, spec, build, verify, report. |
+| `skills/motion-clone/references/` | Capture recipes per source type, how to read frames into a spec, implementation patterns per stack, pass criteria and fixes. |
+| `skills/motion-clone/scripts/capture.ts` | Records a page: video, frames, declared animations, computed styles, fonts, libraries, per-frame element tracks. Triggers: load, scroll, hover, leave, pointer path, drag, click, none. |
+| `skills/motion-clone/scripts/frames.ts` | Extracts and crops frames from a video or gif. |
+| `skills/motion-clone/scripts/compare.ts` | Frame-by-frame comparison: alignment, timing error, mismatch, activity curves, diff images. |
+| `skills/motion-clone/scripts/easing.ts` | Fits a tracked property to named easings, detects overshoot and springs, diffs two tracks. |
+| `skills/motion-clone/scripts/sheet.ts` | Labelled contact sheets and reference / clone / diff comparison sheets. |
+| `site/` | The showcase website (Next.js, static export on Cloudflare Workers) with the cloned examples running live. See [`site/README.md`](site/README.md). |
 
 ## Requirements
 
 - [Bun](https://bun.sh) 1.1 or later.
 - macOS or Linux. Windows is untested.
-- About 250 MB on first run for Chromium and ffmpeg, installed by `scripts/setup.sh` into the skill's own folder.
+- About 250 MB on first run for Chromium and ffmpeg, installed by `skills/motion-clone/scripts/setup.sh` into the skill's own folder.
 
 The skills CLI can install it for other agents that read `SKILL.md`, but it has only been tested with Claude Code.
 
@@ -128,4 +131,4 @@ The skills CLI can install it for other agents that read `SKILL.md`, but it has 
 
 ## License
 
-[MIT](LICENSE). The gallery recreates three cards from stripe.com as a study of the technique; it is not affiliated with or endorsed by Stripe. Stripe and Visa are trademarks of their respective owners.
+[MIT](LICENSE). The gallery and the site's examples recreate three cards from stripe.com as a study of the technique; it is not affiliated with or endorsed by Stripe. Stripe and Visa are trademarks of their respective owners.
