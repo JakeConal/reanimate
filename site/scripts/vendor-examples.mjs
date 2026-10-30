@@ -17,3 +17,11 @@ cpSync(nm("three", "LICENSE"), join(vendor, "three", "LICENSE"));
 cpSync(nm("@fontsource-variable", "inter", "files", "inter-latin-wght-normal.woff2"), join(vendor, "fonts", "inter-latin-wght-normal.woff2"));
 cpSync(nm("@fontsource-variable", "inter", "LICENSE"), join(vendor, "fonts", "LICENSE-inter.txt"));
 console.log("vendored three.js + Inter into", vendor);
+
+// resend-cube: three.js only (no addons, no fonts).
+const resendVendor = join(root, "public", "examples", "resend-cube", "vendor");
+rmSync(resendVendor, { recursive: true, force: true });
+mkdirSync(join(resendVendor, "three"), { recursive: true });
+for (const f of ["three.module.js", "three.core.js"]) cpSync(nm("three", "build", f), join(resendVendor, "three", f));
+cpSync(nm("three", "LICENSE"), join(resendVendor, "three", "LICENSE"));
+console.log("vendored three.js into", resendVendor);

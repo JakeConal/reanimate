@@ -195,8 +195,8 @@ export default function Home() {
 
         <Section id="examples" n={5} title="Examples">
           <p>
-            Hover a clerk.com card to play it, or on a phone just scroll to it. The copies use the free Geist font, so only the lettering differs. For stripe.com and workos.com, the original plays on the left and the copy on the
-            right.
+            Hover a clerk.com card to play it, or on a phone just scroll to it. The copies use the free Geist font, so only the lettering differs. For the others, the original plays on the left or on top, and the copy next to it or
+            below.
           </p>
           <nav className="strip" aria-label="Examples">
             {examples.map((e) => (
@@ -214,7 +214,16 @@ export default function Home() {
                 </h3>
                 <Details e={e} />
               </div>
-              {e.show.kind === "video" ? (
+              {e.show.kind === "video" && e.show.height > e.show.width ? (
+                // wider than tall: the two takes are stacked
+                <figure className="figure">
+                  <CompareVideo src={media(e.slug, "compare.mp4")} width={e.show.width} height={e.show.height} label={`${e.title}: ${e.source.name} on top, the copy below`} />
+                  <figcaption className="figure__caption">
+                    <span>{e.source.name} on top, the copy below</span>
+                    <a href={e.live} target="_blank" rel="noreferrer">try it live ↗</a>
+                  </figcaption>
+                </figure>
+              ) : e.show.kind === "video" ? (
                 <figure className="figure">
                   <CompareVideo src={media(e.slug, "compare.mp4")} width={e.show.width} height={e.show.height} label={`${e.title}: ${e.source.name} on the left, the copy on the right`} />
                   <figcaption className="figure__caption figure__caption--pair">
@@ -247,7 +256,10 @@ export default function Home() {
           <span>
             <a href={REPO}>GitHub</a> · MIT licence · built with reanimate
           </span>
-          <span>The examples recreate parts of stripe.com, workos.com and clerk.com as a study of the technique. Not affiliated with or endorsed by Stripe, WorkOS or Clerk. All trademarks belong to their owners.</span>
+          <span>
+            The examples recreate parts of stripe.com, workos.com, clerk.com, liveblocks.io, resend.com and pro.reactbits.dev as a study of the technique. Not affiliated with or endorsed by Stripe, WorkOS, Clerk, Liveblocks, Resend or React Bits. All trademarks belong
+            to their owners.
+          </span>
         </footer>
       </main>
     </div>

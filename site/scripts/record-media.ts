@@ -22,6 +22,7 @@ type Clip = {
   select: string[]; // what to film: the crop is these elements' union plus PAD, on both pages
   trigger: "scroll" | "hover"; // scroll: the entrance as they scroll into view; hover: HOVER_PATH over the first
   pin?: number; // Math.random returns this from just before the trigger, so random picks come out the same on both pages
+  sync?: boolean; // the motion is a loop each page starts when its scene is ready, not on the trigger: line the takes up by their frames
 };
 
 const bento = (card: string) => `.modular-solutions-bento__card-${card}`;
@@ -31,6 +32,10 @@ const CLIPS: Clip[] = [
   { slug: "stripe-issuing", reference: "https://stripe.com/", clone: "/examples/stripe-bento/", select: [bento("issuing")], trigger: "hover" },
   { slug: "stripe-crypto", reference: "https://stripe.com/", clone: "/examples/stripe-bento/", select: [bento("crypto")], trigger: "hover" },
   { slug: "workos-atlas", reference: "https://workos.com/atlas", clone: "/examples/workos-atlas/", select: ['[aria-label^="Atlas reaching out"]'], trigger: "scroll", pin: 0.37 },
+  { slug: "liveblocks-comments", reference: "https://liveblocks.io/comments", clone: "/examples/liveblocks-comments/", select: ['.select-none[class*="aspect-1208/770"]'], trigger: "scroll", sync: true },
+  { slug: "resend-cube", reference: "https://resend.com/", clone: "/examples/resend-cube/", select: [".animate-webgl-scale-in-fade"], trigger: "scroll", sync: true },
+  // the preview is an iframe on the original; one selector list finds it there and the copy's canvas here
+  { slug: "reactbits-fading-stars", reference: "https://pro.reactbits.dev/docs/components/fading-stars?browse=components", clone: "/examples/reactbits-fading-stars/", select: ['iframe[title="Preview"], .fading-stars'], trigger: "hover" },
 ];
 
 const { values: args } = parseArgs({
@@ -56,6 +61,7 @@ const HOVER_MS = 5000;
 const COMPARE_WIDTH = 1120; // compare.mp4, in px: 2x the page column
 const COMPARE_GAP = 24;
 const COMPARE_HOLD_MS = 1000; // the last frame is held this long before the loop starts again
+const SYNC_MS = 4000; // with `sync`, how far apart the two loops may be; the takes run this much longer
 // Pointer path, as fractions of the element's box: in from the left, hold, across, hold, out to the
 // right. Times in ms from the start of the clip.
 const HOVER_PATH: [number, number, number][] = [
@@ -189,7 +195,7 @@ async function film(browser: Browser, clip: Clip, side: Side): Promise<Take> {
     await scrollIn();
     await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
     start = Date.now(); // the elements are on screen, not yet mounted
-    ms = ENTRANCE_MS + 2500;
+    ms = ENTRANCE_MS + 2500 + (clip.sync ? SYNC_MS : 0);
     await sleep(ms);
   } else {
     // Mouse input lands in the zoomed window's coordinates, so CSS px are scaled up to match.
@@ -255,6 +261,33 @@ function contentAppears(file: string): number {
     if (changed / size > 0.01) return (i / FPS) * 1000;
   }
   throw new Error(`no content appeared in ${file}`);
+}
+
+// For `sync` clips: how many ms the reference's loop runs behind the clone's, found by sliding one take
+// along the other and keeping the shift where the frames differ least. Negative when the clone is behind.
+function loopOffset(reference: string, clone: string): number {
+  const [w, h] = dims(reference);
+  const sw = 96;
+  const sh = Math.round((h / w) * sw / 2) * 2;
+  const gray = (file: string) => run("ffmpeg", ["-v", "error", "-i", file, "-vf", `scale=${sw}:${sh},format=gray`, "-f", "rawvideo", "-"]);
+  const ref = gray(reference);
+  const cl = gray(clone);
+  const size = sw * sh;
+  const n = Math.min(ref.length, cl.length) / size;
+  const max = Math.round((SYNC_MS / 1000) * FPS);
+  const from = Math.round(0.5 * FPS);
+  const span = n - from - max; // frames compared at every shift
+  let best = { k: 0, d: Infinity };
+  for (let k = -max; k <= max; k++) {
+    let d = 0;
+    for (let i = from; i < from + span; i += 2) {
+      const a = (i + Math.max(0, k)) * size;
+      const b = (i + Math.max(0, -k)) * size;
+      for (let p = 0; p < size; p += 3) d += Math.abs(ref[a + p] - cl[b + p]);
+    }
+    if (d < best.d) best = { k, d };
+  }
+  return (best.k / FPS) * 1000;
 }
 
 // The original and the clone in one file, so the page never has to keep two videos in step: side by
@@ -338,14 +371,22 @@ for (const clip of CLIPS) {
     if (take!.small) throw new Error(`${clip.slug} ${side}: frames kept coming out at 1x`);
     const file = join(WORK, `${clip.slug}-${side}.mkv`);
     master(take!, file);
-    takes[side] = { file, appear: clip.trigger === "scroll" ? contentAppears(file) : 0 };
+    takes[side] = { file, appear: clip.trigger === "scroll" && !clip.sync ? contentAppears(file) : 0 };
   }
   const lead = Math.min(ENTRANCE_LEAD_MS, ...SIDES.map((s) => takes[s].appear));
   const ms = clip.trigger === "scroll" ? ENTRANCE_MS : HOVER_MS;
   for (const side of SIDES) masters[`${clip.slug}-${side}`] = { file: takes[side].file, from: takes[side].appear - lead };
+  if (clip.sync) {
+    // start the take that runs behind later, by as much as it runs behind
+    const behind = loopOffset(takes.reference.file, takes.clone.file);
+    masters[`${clip.slug}-reference`].from += Math.max(0, behind);
+    masters[`${clip.slug}-clone`].from += Math.max(0, -behind);
+    console.log(`${clip.slug}: the original's loop runs ${behind.toFixed(0)} ms behind the copy's`);
+  }
   compareMp4(SIDES.map((side) => masters[`${clip.slug}-${side}`]), ms, join(out, "compare.mp4"));
   // At rest: the end of an entrance, the start of a hover.
-  poster(takes.clone.file, clip.trigger === "scroll" ? takes.clone.appear - lead + ms - 100 : 0, join(out, "poster.webp"));
+  const cloneFrom = masters[`${clip.slug}-clone`].from;
+  poster(takes.clone.file, clip.trigger === "scroll" ? cloneFrom + ms - 100 : cloneFrom, join(out, "poster.webp"));
 }
 
 if (masters["stripe-bento-reference"]) {

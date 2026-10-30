@@ -84,6 +84,51 @@ export const examples: Example[] = [
     ],
   },
   {
+    slug: "liveblocks-comments",
+    title: "Comments in any app",
+    source: { name: "liveblocks.io", url: "https://liveblocks.io/comments" },
+    about:
+      "An app window switches every 6 s between a text editor, a media player, a whiteboard, a website and a video editor. Each time, the drawing blurs away and the next one springs in. A second later the comment thread fades over, the panel glides to its new spot and the colours change.",
+    note: "liveblocks.io sets its text in Suisse Int’l, a paid font, so the copy uses Inter spaced to the same widths. Lines break in the same places; the letters differ.",
+    show: { kind: "video", width: 560, height: 732 },
+    live: "/examples/liveblocks-comments/",
+    results: [
+      ["Frame match", "pixels that differ over the 30 s loop", "0.55 %"],
+      ["Panel glide", "position and size, all five changes", "≤ 0.7 px"],
+      ["Timing", "start and end of every change", "0 ms"],
+    ],
+  },
+  {
+    slug: "resend-cube",
+    title: "Hero cube",
+    source: { name: "resend.com", url: "https://resend.com/" },
+    about:
+      "A dark Rubik’s cube fades in and turns slowly on two axes, once every 10 s. Its left slice makes a half-turn every 5 s and its right slice every 8 s, while bars of light leave striped shadows across the faces.",
+    note: "This is resend.com’s own Spline scene, read from the page and drawn with plain three.js: the same geometry, textures, shaders and post-processing, so it draws the same pixels.",
+    show: { kind: "video", width: 560, height: 968 },
+    live: "/examples/resend-cube/",
+    results: [
+      ["Motion", "every rotation, frame by frame over 25 s", "0 differ"],
+      ["Frame match", "pixels that differ over 6 s, entrance included", "0.11 %"],
+      ["Same pixels", "frames after the entrance, within one frame", "265 of 266"],
+    ],
+  },
+  {
+    slug: "reactbits-fading-stars",
+    title: "Fading stars",
+    source: { name: "pro.reactbits.dev", url: "https://pro.reactbits.dev/docs/components/fading-stars" },
+    about:
+      "Violet stars rise from below the frame in a wide fan, each on a trail that fades behind it, and speed up as they climb. Move the pointer over them and the flow surges, then settles over about a second. Click and 64 stars lift off together as an arc.",
+    note: "The stars come from the component’s own random generator with a fixed seed, so they are the same on every load. The copy uses the same generator: started on the same frame, it draws the same pixels.",
+    show: { kind: "video", width: 560, height: 640 },
+    live: "/examples/reactbits-fading-stars/",
+    results: [
+      ["Frame match", "canvas pixels that differ over 4 s, at 1x and 2x", "0 px"],
+      ["Pointer", "pixels that differ during a click burst and a fast drag", "0.014 %"],
+      ["Timing", "star clock and film grain, every rendered frame", "0 ms"],
+    ],
+  },
+  {
     slug: "clerk-mfa",
     title: "Multifactor authentication",
     source: CLERK,
