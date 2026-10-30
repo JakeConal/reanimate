@@ -10,13 +10,18 @@
 </p>
 
 <p align="center">
-  <img src=".github/assets/entrance.webp" width="760" alt="Two recordings of the same three cards fading in: stripe.com on top, the copy reanimate built below. The chat bubbles, the particle ring, the Visa card and the dotted globe appear at the same moments in both.">
+  <a href="https://reanimate.niazmorshed.dev/demo.mp4"><img src=".github/assets/demo.webp" width="760" alt="Moments from the demo video: /reanimate slides in; three browsers record widgets on stripe.com, resend.com and clerk.com; the copies are measured against them until the difference is gone; the 18 examples turn on a helix; the install command types itself in."></a>
 </p>
-<p align="center"><sub>Three cards from stripe.com. Top: the original. Bottom: the copy, filmed the same way.</sub></p>
+<p align="center"><sub>A one-minute demo. <a href="https://reanimate.niazmorshed.dev/demo.mp4">Watch it with sound</a>.</sub></p>
 
 A lot of good ideas start on someone else's site. Ask an agent to rebuild one from a link or a screenshot and it makes one pass, calls it done, and misses. It can't see the motion or tell how far off it is.
 
 reanimate records the original, rebuilds it in your code, then records the copy the same way and compares the two. Each round shows what's still off, so the agent keeps going until the numbers match. You end up with a close starting point to make your own.
+
+<p align="center">
+  <img src=".github/assets/entrance.webp" width="760" alt="Two recordings of the same three cards fading in: stripe.com on top, the copy reanimate built below. The chat bubbles, the particle ring, the Visa card and the dotted globe appear at the same moments in both.">
+</p>
+<p align="center"><sub>Three cards from stripe.com. Top: the original. Bottom: the copy, filmed the same way.</sub></p>
 
 ## Install
 
@@ -58,7 +63,7 @@ By default it matches the motion and leaves the look to you. Ask for more or les
 
 ## Examples
 
-Three cards from the stripe.com homepage, the integrations visual from workos.com/atlas and the feature cards from clerk.com, each cloned by its own agent running this skill, most in 30 to 60 minutes. The [site](site/) shows the Stripe and WorkOS ones next to a recording of the original, and runs the Clerk cards live in the page.
+Three cards from the stripe.com homepage, the integrations visual from workos.com/atlas, the feature cards from clerk.com, the demo under the liveblocks.io/comments hero, the cube in the resend.com hero and React Bits Pro's Fading Stars, each cloned by its own agent running this skill, most in 30 to 80 minutes. The [site](site/) shows each one next to a recording of the original, except the Clerk cards, which run live in the page.
 
 | Clone | Built with | Measured against the original |
 |---|---|---|
@@ -67,6 +72,9 @@ Three cards from the stripe.com homepage, the integrations visual from workos.co
 | **Stablecoins and crypto**: a dotted globe with flying payments | three.js, Web Workers | globe pose exact; arcs and labels within stripe.com's own spread |
 | **Connected to all your tools** (workos.com): a robot reaching out to a dome of app icons | HTML, SVG, WebGPU | 0.05 % of pixels differ; each link within 10 ms |
 | **Feature cards** (clerk.com): passcodes, magic links, a radar, a laptop opening and more, each playing on hover | HTML, SVG, canvas, WebGL2 | each card's motion within 40 ms; under 0.6 % of pixels differ |
+| **Comments in any app** (liveblocks.io): an app window switching between five apps, its comment panel gliding to each | HTML, SVG, springs | every change on time (0 ms); panel within 0.7 px; 0.55 % of pixels differ |
+| **Hero cube** (resend.com): a dark Rubik's cube turning, its slices making half-turns | three.js | every rotation exact over 25 s; 0.11 % of pixels differ |
+| **Fading stars** (pro.reactbits.dev): violet stars rising in a fan, surging with the pointer | WebGL2 | 0 px differ at rest; 0.014 % during a click burst |
 
 ## Canvas, WebGL and 3D
 
@@ -106,4 +114,4 @@ Only `skills/reanimate/` is installed by the skills CLI; `site/` is the website 
 
 ## License
 
-[MIT](LICENSE). The examples recreate parts of stripe.com, workos.com and clerk.com as a study of the technique; it is not affiliated with or endorsed by Stripe, WorkOS or Clerk. All trademarks belong to their owners.
+[MIT](LICENSE). The examples recreate parts of stripe.com, workos.com, clerk.com, liveblocks.io, resend.com and pro.reactbits.dev as a study of the technique; it is not affiliated with or endorsed by Stripe, WorkOS, Clerk, Liveblocks, Resend or React Bits. All trademarks belong to their owners.

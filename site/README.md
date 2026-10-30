@@ -22,7 +22,7 @@ bun run lint
 2. Put its media in `public/media/<slug>/`: `poster.webp` (the clone at rest, for the thumbnails) and, for a recorded example, `compare.mp4` (the original and the clone, recorded the same way and side by side in one file).
 3. Add an entry to `src/examples.ts`. The home page shows it at the end, under Examples; what it does and its numbers sit behind a "details" tooltip. `show.kind` picks the picture: `"video"` plays `compare.mp4`; `"live"` runs the clone itself in the page, in an iframe (the clerk.com cards do this; `clerk-bento/?card=<slug>&embed` frames one card for it).
 
-To record the media, add a row to `CLIPS` in `scripts/record-media.ts`: the original's URL, the clone's path and the elements to film, plus `pin` when the animation picks things at random, so both sides pick the same. With the site running on `bun run preview`:
+To record the media, add a row to `CLIPS` in `scripts/record-media.ts`: the original's URL, the clone's path and the elements to film, plus `pin` when the animation picks things at random, so both sides pick the same, and `sync` when each page runs a loop that starts on its own clock rather than on the scroll or hover, so the two takes are lined up by their frames. With the site running on `bun run preview`:
 
 ```sh
 bun run media                       # every clip
@@ -54,11 +54,12 @@ Then either:
 | `src/app/page.tsx` | The whole page: copy, sections, tables. |
 | `src/examples.ts` | The examples, in the order they appear. |
 | `src/components/` | `CompareVideo` (plays a `compare.mp4` while it's on screen), `LiveCard` (a clone in an iframe, scaled down on narrow screens), `Nav`, `Sidenote`, `CopyCommand`. |
-| `public/examples/` | The clones as standalone pages. `stripe-bento/?card=agentic-commerce\|issuing\|crypto` shows one card; `workos-atlas/` is the workos.com integrations visual; `clerk-bento/` is clerk.com's grid of feature cards (`?card=<slug>` for one). |
+| `public/examples/` | The clones as standalone pages. `stripe-bento/?card=agentic-commerce\|issuing\|crypto` shows one card; `workos-atlas/` is the workos.com integrations visual; `clerk-bento/` is clerk.com's grid of feature cards (`?card=<slug>` for one); `liveblocks-comments/` is the demo under the liveblocks.io/comments hero; `resend-cube/` is the resend.com hero cube; `reactbits-fading-stars/` is React Bits Pro's Fading Stars. |
 | `public/media/` | Comparisons and posters, one folder per example. `stripe-bento/` is the entrance at the top of the page. |
 | `scripts/record-media.ts` | Records the examples' media and the README animations. |
 | `marketing/launch.md` | Launch post drafts. |
+| `video/` | The 64-second demo video, as a page drawn frame by frame from the time and rendered to mp4 ([`video/README.md`](video/README.md)). The site serves it at `/demo.mp4` (`public/demo.mp4`). |
 
 ## About the examples
 
-The live examples recreate parts of stripe.com, workos.com and clerk.com as a study of the technique. The Stripe cards use Inter instead of Stripe's licensed Söhne, but port Stripe's shaders and use Stripe's images; the WorkOS visual uses WorkOS's robot images, app icons and screen shaders; the Clerk cards use Geist and Geist Mono instead of Clerk's licensed fonts, and port Clerk's inline SVG, light-streak canvas and dot-field shader. Not affiliated with or endorsed by Stripe, WorkOS or Clerk.
+The live examples recreate parts of stripe.com, workos.com and clerk.com as a study of the technique. The Stripe cards use Inter instead of Stripe's licensed Söhne, but port Stripe's shaders and use Stripe's images; the WorkOS visual uses WorkOS's robot images, app icons and screen shaders; the Clerk cards use Geist and Geist Mono instead of Clerk's licensed fonts, and port Clerk's inline SVG, light-streak canvas and dot-field shader. The Liveblocks demo uses Inter instead of the licensed Suisse Int'l, and reuses liveblocks.io's avatars, drawings and icons. The Resend cube draws resend.com's own Spline scene (geometry, textures and shaders) with three.js, over resend.com's hero images. Fading Stars ports the shaders and simulation that pro.reactbits.dev runs for its live preview. Not affiliated with or endorsed by Stripe, WorkOS, Clerk, Liveblocks, Resend or React Bits.
