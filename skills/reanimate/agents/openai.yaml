@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reanimate"
+  short_description: "Recreate reference animations and verify their motion"
+  default_prompt: "Use $reanimate to recreate the animation from my reference in this project and verify it frame by frame."

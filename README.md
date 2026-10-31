@@ -1,8 +1,9 @@
 <h1 align="center">reanimate</h1>
 
-<p align="center"><b>Reverse-engineer animations you like. Build your own on top.</b><br>A Claude Code skill that works from a live site, a screen recording, an mp4, a gif or a Lottie file.</p>
+<p align="center"><b>Reverse-engineer animations you like. Build your own on top.</b><br>A Codex-compatible Agent Skill that works from a live site, a screen recording, an mp4, a gif or a Lottie file.</p>
 
 <p align="center">
+  <a href="https://developers.openai.com/codex/skills"><img src="https://img.shields.io/badge/Codex-skill-171717?style=flat-square&logo=openai&logoColor=white" alt="Codex skill"></a>
   <a href="https://code.claude.com/docs/en/skills"><img src="https://img.shields.io/badge/Claude_Code-skill-171717?style=flat-square&logo=claude&logoColor=white" alt="Claude Code skill"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/Agent_Skills-compatible-171717?style=flat-square" alt="Agent Skills compatible"></a>
   <a href="#install"><img src="https://img.shields.io/badge/runs_on-Bun-171717?style=flat-square&logo=bun&logoColor=white" alt="Runs on Bun"></a>
@@ -25,8 +26,29 @@ reanimate records the original, rebuilds it in your code, then records the copy 
 
 ## Install
 
+### Codex
+
+Ask Codex to install this fork using its built-in skill installer:
+
+```text
+$skill-installer install the skill from https://github.com/JakeConal/reanimate/tree/main/skills/reanimate
+```
+
+Then invoke `$reanimate` and describe the source and destination:
+
+```text
+$reanimate the hero entrance on https://example.com, into components/Hero.tsx
+$reanimate this loader, 0:03 to 0:05 of the attached recording
+$reanimate the card hover in this gif, match it exactly
+$reanimate the logo marquee from https://example.com, with our logos and pause on hover
+```
+
+The skill also supports automatic selection for reference-based animation requests. It includes Codex UI metadata in `agents/openai.yaml` and does not require an MCP server. For manual installation, copy the entire `skills/reanimate` directory into your project's `.agents/skills/reanimate` or your personal `~/.agents/skills/reanimate`. Codex detects skill changes automatically; restart it if the skill does not appear. See the [official Codex skills documentation](https://developers.openai.com/codex/skills).
+
+### Other agents
+
 ```sh
-npx skills add NiazMorshed2007/reanimate -g
+npx skills add JakeConal/reanimate -g
 ```
 
 The [skills CLI](https://skills.sh) asks which agents to set up; add `-a claude-code` to skip the question. Then, in Claude Code, say what you want, where it is and where it should go:
@@ -38,7 +60,19 @@ The [skills CLI](https://skills.sh) asks which agents to set up; add `-a claude-
 /reanimate the logo marquee from https://example.com, with our logos and pause on hover
 ```
 
-Needs [Bun](https://bun.sh) 1.1 or later, on macOS or Linux (Windows is untested). The first run installs a static ffmpeg into the skill's folder and Playwright's Chromium into Playwright's usual cache, about 250 MB together. No API keys. Other agents that read `SKILL.md` can install it too, but it has only been tested with Claude Code.
+### Runtime setup
+
+Needs [Bun](https://bun.sh) 1.4 or later on PATH (validation uses 1.4.4). Setup supports Windows PowerShell, macOS and Linux:
+
+```sh
+bun "<installed-skill-path>/scripts/setup.ts"
+```
+
+The first run installs the locked dependencies and a static ffmpeg into the skill's folder, and Playwright's Chromium into Playwright's usual cache. Download size varies by platform. The package explicitly trusts only ffmpeg-static's install hook to download its executable. On Linux, Chromium may also require system libraries. No API keys. `setup.sh` is retained as a wrapper for Bash users.
+
+Capture commands accept local HTML paths, including Windows paths with spaces. Quote paths when running the scripts. Reference examples with Bash `\` line continuations should be entered on one line in PowerShell.
+
+After setup, run `bun test` from `skills/reanimate/scripts` to check local HTML capture, video frame extraction, frame comparison, contact sheets and easing analysis. The GitHub Actions workflow runs these checks on Windows, macOS and Linux.
 
 ## How it works
 
@@ -100,7 +134,9 @@ Only `skills/reanimate/` is installed by the skills CLI; `site/` is the website 
 
 | Path | What it is |
 |---|---|
-| `SKILL.md` | The workflow Claude follows: scope, capture, spec, build, verify, report. |
+| `SKILL.md` | The workflow Codex or another compatible agent follows: scope, capture, spec, build, verify, report. |
+| `agents/openai.yaml` | Codex display name, description and example prompt. |
+| `scripts/setup.ts` | Cross-platform dependency installation and Chromium/ffmpeg checks; `setup.sh` delegates to it. |
 | `references/` | Capture recipes per source type, reading frames into a spec, implementation patterns per stack, WebGL, pass criteria and fixes. |
 | `scripts/capture.ts` | Records a page: video, frames, declared animations, computed styles, fonts, libraries, per-frame element tracks. Triggers: load, scroll, hover, leave, pointer path, drag, click, none. `--clock virtual` steps a virtual clock frame by frame (exact frames, identical captures, seeded `Math.random`); `--gl` traces the GPU; `--assets` saves models, textures and scripts. |
 | `scripts/gl.ts` | Reads a GPU trace: canvases, three.js / Pixi / PlayCanvas / Babylon / OGL scene graphs, shaders, passes, textures, animated uniforms as channels, and a reference-vs-clone comparison. |

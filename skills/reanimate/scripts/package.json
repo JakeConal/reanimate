@@ -2,6 +2,11 @@
   "name": "reanimate-scripts",
   "private": true,
   "type": "module",
+  "scripts": {
+    "setup": "bun setup.ts",
+    "test": "bun test"
+  },
+  "trustedDependencies": ["ffmpeg-static"],
   "dependencies": {
     "ffmpeg-static": "^5.2.0",
     "pixelmatch": "^8.0.0",

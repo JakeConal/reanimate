@@ -1,6 +1,6 @@
 ---
 name: reanimate
-description: Clone a section, widget, page or animation from any reference (a live website URL, a screen recording, an mp4/mov/webm, a gif, a Lottie file, a prototype export) frame by frame into the user's own codebase, then record the clone and verify it against the reference frame by frame, iterating until timing, easing, sequence and layout match. Use whenever the user wants to clone, copy, replicate, recreate, reverse-engineer, port or "steal" a hero, section, widget, marquee, carousel, hover effect, page transition, loader, scroll animation or interaction from a site or video, says "make it look/feel/move like this", "same animation as", "match this exactly", or hands over a gif/video and asks to build it, including when they also want to add their own content, colours or extra features on top, or only want part of the reference (one section, one widget, a few seconds). Covers canvas, WebGL, WebGPU and three.js / 3D scenes (shaders, particles, globes, glTF models) as well as CSS and JS motion. Pixel-level matching of fonts, colours and spacing is done only when they ask for it.
+description: Recreate an animation or interaction from a live website, screen recording, video, GIF, Lottie file or prototype export in the user's codebase, then verify timing, easing and sequence with frame-by-frame captures. Use for reference-based hero entrances, hovers, loaders, marquees, scroll effects, transitions and canvas/WebGL/three.js motion, including adaptations with the user's content. Match pixels only when requested. Not for unrelated static page cloning or animation design without a reference.
 ---
 
 # reanimate
@@ -35,13 +35,19 @@ Infer what you can from the request and the repo. Ask only when two readings lea
 
 ### 1. Setup
 
-`<skill>` below is the directory this SKILL.md lives in. Scripts need [Bun](https://bun.sh); the first run downloads Playwright's Chromium and a static ffmpeg (about 250 MB).
+`<skill>` below is the directory this SKILL.md lives in, resolved from the skill path supplied by Codex (or the host agent), not from the user's project. Scripts need [Bun](https://bun.sh) 1.4 or later on PATH. Check `bun --version` first; if missing or too old, explain the prerequisite instead of silently installing a global runtime. The first setup downloads Playwright's Chromium and a static ffmpeg; download size varies by platform.
 
-```bash
-bash <skill>/scripts/setup.sh      # installs playwright, ffmpeg, pixelmatch once; prints "ready"
+```sh
+bun "<skill>/scripts/setup.ts"
 ```
 
-All scripts are run with `bun <skill>/scripts/<name>.ts --help`. They are deterministic and share one rule: capture the reference and the clone with the **same** viewport, selector crop, trigger, duration and fps, otherwise the comparison measures your setup instead of your work.
+This entrypoint works in PowerShell, Bash and zsh; `setup.sh` remains a Bash wrapper. It installs the locked dependencies in the skill directory, checks Chromium and ffmpeg, and prints `ready`. If Linux Chromium reports missing system libraries, report that requirement or use the environment's approved dependency setup.
+
+Run scripts with `bun "<skill>/scripts/<name>.ts" --help`. Quote absolute paths, especially on Windows. The reference recipes use Bash line continuations; in PowerShell put each command on one line. Work from the evidence directory or use explicit project paths so outputs stay in the user's project, not the installed skill.
+
+In Codex, use the available terminal tool to run these scripts and the available local image viewer (such as `view_image`) to inspect generated sheets. Browser tools can help identify a target, but do not assume a particular MCP server is installed. The bundled Playwright scripts produce the captures and metrics; a browser screenshot alone is not a motion comparison. If execution, downloads or image viewing are unavailable, state the limitation and leave the relevant checks unverified.
+
+Capture the reference and the clone with the **same** viewport, selector crop, trigger, duration and fps, otherwise the comparison measures your setup instead of your work.
 
 ### 2. Capture the reference
 
@@ -71,9 +77,9 @@ Give the clone a way to be captured the same way as the reference: a route or a 
 Capture the clone with the exact command used for the reference, changing only `--url` and `--out clone-N`, then:
 
 ```bash
-bun <skill>/scripts/compare.ts --ref ref/frames --clone clone-N/frames --out compare-N
-bun <skill>/scripts/sheet.ts compare --ref ref/frames --clone clone-N/frames --diff compare-N/diff --out compare-N/sheets --every 2
-bun <skill>/scripts/easing.ts --track clone-N/track.json --selector "<el>" --prop <translateY|opacity|…> --compare-track ref/track.json
+bun "<skill>/scripts/compare.ts" --ref ref/frames --clone clone-N/frames --out compare-N
+bun "<skill>/scripts/sheet.ts" compare --ref ref/frames --clone clone-N/frames --diff compare-N/diff --out compare-N/sheets --every 2
+bun "<skill>/scripts/easing.ts" --track clone-N/track.json --selector "<el>" --prop <translateY|opacity|…> --compare-track ref/track.json
 ```
 
 For canvas work, also run `gl.ts compare --ref ref --clone clone-N`, which checks canvas settings, draw structure and every animated channel.
